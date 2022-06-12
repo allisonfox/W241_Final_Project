@@ -7,42 +7,16 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, include=FALSE}
 # Load packages
 library(data.table)
+library(ggplot2)
+library(gridExtra)
 ```
 
 Find an article that shows males and older individuals are more right leaning.
 Vary the treatment effect size.
 https://www.pewresearch.org/fact-tank/2020/04/01/americans-main-sources-for-political-news-vary-by-party-and-age/
-
-```{r}
-# create simulation function
-percentages_to_sample <- seq(0.1, 2, by=0.1)
-
-power_list <- c()
-
-for (i in percentages_to_sample) {
-  t_test_p_values <- rep(NA, 1000)
-  t_test_p_values <- replicate(1000, lm(Y ~ is_male + is_female + is_old + is_facebook), 
-                     data = d[, .SD[sample(x = .N, size = length(d$bid)*i, replace=TRUE)], 
-                              by = treat_condition])
-  power_list <- c(power_list, power) # create a list of lists (the internal list being for each coefficient)
-  power_list
-    tau_male
-      p_value_1
-      p_value_2
-    tau_female
-      p_value_1
-      p_value_2
-}
-
-power_list
-
-model <- lm(Y ~ is_male + is_female + is_old + is_facebook, data = d)
-summary(model)
-summary(model)$coefficients[,2] 
-```
 
 ```{r}
 # This will hold true for all simulations.
@@ -232,46 +206,54 @@ SimulatePower <- function(experiment_data){
 
 # Low Treatment Effect
 ```{r}
-y0 <- rnorm(estimated_sample_size, mean = 0, sd = 5)
-tau_male <- rnorm(estimated_sample_size, mean = 2, sd = 5)
-tau_female <- rnorm(estimated_sample_size, mean = -1, sd = 5)
-tau_old <- rnorm(estimated_sample_size, mean = 5, sd = 5)
-tau_facebook <- rnorm(estimated_sample_size, mean = -1, sd = 10) 
+y0 <- rnorm(estimated_sample_size, mean = 0, sd = 3)
+tau_male <- rnorm(estimated_sample_size, mean = 3, sd = 3)
+tau_female <- rnorm(estimated_sample_size, mean = -1, sd = 3)
+tau_old <- rnorm(estimated_sample_size, mean = 2, sd = 3)
+tau_facebook <- rnorm(estimated_sample_size, mean = -1, sd = 3) 
 
 experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
 
-SimulatePower(experiment_data)
+low_effect <- SimulatePower(experiment_data)
 ```
 
 # Regular Treatment Effect
 ```{r}
-y0 <- rnorm(estimated_sample_size, mean = 0, sd = 5)
-tau_male <- rnorm(estimated_sample_size, mean = 2, sd = 5)
-tau_female <- rnorm(estimated_sample_size, mean = -1, sd = 5)
-tau_old <- rnorm(estimated_sample_size, mean = 5, sd = 5)
-tau_facebook <- rnorm(estimated_sample_size, mean = -1, sd = 10) 
+y0 <- rnorm(estimated_sample_size, mean = 0, sd = 3)
+tau_male <- rnorm(estimated_sample_size, mean = 5, sd = 3)
+tau_female <- rnorm(estimated_sample_size, mean = -3, sd = 3)
+tau_old <- rnorm(estimated_sample_size, mean = 4, sd = 3)
+tau_facebook <- rnorm(estimated_sample_size, mean = -3, sd = 3) 
 
 experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
 
-SimulatePower(experiment_data)
+regular_effect <- SimulatePower(experiment_data)
 ```
 
 # Large Treatment Effect
 ```{r}
-y0 <- rnorm(estimated_sample_size, mean = 0, sd = 5)
-tau_male <- rnorm(estimated_sample_size, mean = 2, sd = 5)
-tau_female <- rnorm(estimated_sample_size, mean = -1, sd = 5)
-tau_old <- rnorm(estimated_sample_size, mean = 5, sd = 5)
-tau_facebook <- rnorm(estimated_sample_size, mean = -1, sd = 10) 
+y0 <- rnorm(estimated_sample_size, mean = 0, sd = 3)
+tau_male <- rnorm(estimated_sample_size, mean = 7, sd = 3)
+tau_female <- rnorm(estimated_sample_size, mean = -5, sd = 3)
+tau_old <- rnorm(estimated_sample_size, mean = 6, sd = 3)
+tau_facebook <- rnorm(estimated_sample_size, mean = -5, sd = 3) 
 
 experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
 
-SimulatePower(experiment_data)
+large_effect <- SimulatePower(experiment_data)
 ```
 
-
+# Sample Size and Power
 ```{r}
-# plot the graphs 
-# one plot for each variable
-# three lines on each plot (low, medium, high)
+low_effect$Effect <- 'Low'
+regular_effect$Effect <- 'Regular'
+large_effect$Effect <- 'Large'
+data <- rbind(low_effect, regular_effect, large_effect)
+
+is_male <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_male_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Male") + theme(plot.title = element_text(hjust = 0.5))
+is_female <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_female_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Female") + theme(plot.title = element_text(hjust = 0.5))
+is_old <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_old_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Old") + theme(plot.title = element_text(hjust = 0.5))
+is_facebook <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_facebook_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Facebook") + theme(plot.title = element_text(hjust = 0.5))
+plot_list <- list(is_male, is_female, is_old, is_facebook)
+grid.arrange(is_male, is_female, is_old, is_facebook, nrow=2,top=("Relationship between Sample Size and Power"))
 ```
