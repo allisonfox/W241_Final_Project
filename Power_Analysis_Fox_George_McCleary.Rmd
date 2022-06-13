@@ -1,0 +1,267 @@
+---
+title: "Power Analysis"
+author: "Allison Fox, Hannah George, and Carlie McCleary"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=FALSE}
+# Load packages
+library(data.table)
+library(ggplot2)
+library(gridExtra)
+```
+
+The team conducted a power analysis of the experiment by simulating the data generating process in three separate outcome scenarios. The purpose of the analysis was to ensure an adequate amount of samples are collected to generate enough power to properly reject the null hypothesis of no effect. The three scenarios that were explored were related to the expected treatment effect of our age, gender, and news platform (Youtube vs Facebook) covariates. In each subsequent simulation the magnitude of the effects increased, which was the political news bias score, while the standard deviations remained constant. 
+
+Assumed treatment effects used in the simulations were influenced by the findings of a Pew Research article (https://www.pewresearch.org/fact-tank/2020/04/01/americans-main-sources-for-political-news-vary-by-party-and-age/). The article suggests there are demographic differences apparent among those who rely on left or right leaning news sources. More specifically, Fox News is one of the most well known Republican leaning sources and it's viewership is predominantly male and older individuals. The rest of the news sources outlined in the article were Democratic leaning and almost all had majority female viewers. This evidence aided in setting the baseline treatment effect directions and magnitudes.
+
+
+```{r, echo=FALSE}
+# This will hold true for all simulations.
+estimated_sample_size <- 126
+```
+
+The first step of the power analysis was to simulate the data generating process. We created a function to produce expected experimental data given an estimate of the co-variate treatment effects (tau) and a baseline sample size of 126.
+
+```{r, echo=FALSE}
+CreateData <- function(sample_size, y0, tau_male, tau_female, tau_old, 
+                       tau_facebook) {
+  #' Creates a simulation of the expected data from the experiment given the
+  #' estimated tau distributions and sample size.
+  #' 
+  #' Args:
+  #'  sample_size: The desired number of samples for the output data.
+  #'  y0: Normal distribution of the effect of being 20-29 years old and of a non-
+  #'    specified gender has on the bias of news media presented on YouTube.
+  #'    gender
+  #'  tau_male: Normal distribution of the effect of identifying as male has on
+  #'    the bias of news media presented on YouTube.
+  #'  tau_female: Normal distribution of the effect of identifying as female has
+  #'    on the bias of news media presented on YouTube.
+  #'  tau_old: Normal distribution of the effect of being 60-69 years old has on
+  #'    the bias of news media presented on YouTube.
+  #'  tau_facebook: Normal distribution of the effect being on Facebook has on
+  #'    the bias of the news media presented.
+  #'    
+  #' Returns:
+  #'  d: A data table of the simulated experiment data.
+
+  d <- data.table(id = 1:sample_size) 
+  d[ , ':='(
+    y0 = y0,
+    tau_male = tau_male, 
+    tau_female = tau_female, 
+    tau_old = tau_old,
+    tau_facebook = tau_facebook
+  )]
+  
+  all_group_combos <- c(
+    'na-young-facebook',
+    'na-old-facebook',
+    'male-young-facebook',
+    'male-old-facebook',
+    'female-young-facebook',
+    'female-old-facebook',
+    'na-young-youtube',
+    'na-old-youtube',
+    'male-young-youtube',
+    'male-old-youtube',
+    'female-young-youtube',
+    'female-old-youtube'
+  )
+  
+  d[ , treat_condition := sample(c(all_group_combos), size = .N, replace = TRUE)]
+  
+  d[treat_condition == 'na-young-facebook', ':=' (avg_bias = y0 + tau_facebook, 
+                                                  is_male=0, 
+                                                  is_female=0, 
+                                                  is_old=0, 
+                                                  is_facebook=1)]
+  d[treat_condition == 'na-old-facebook', ':=' (avg_bias = y0 + tau_old + tau_facebook, 
+                                                is_male=0, 
+                                                is_female=0, 
+                                                is_old=1, 
+                                                is_facebook=1)]
+  d[treat_condition == 'male-young-facebook', ':=' (avg_bias = y0 + tau_male + tau_facebook, 
+                                                    is_male=1, 
+                                                    is_female=0, 
+                                                    is_old=0, 
+                                                    is_facebook=1)]
+  d[treat_condition == 'male-old-facebook', ':=' (avg_bias = y0 + tau_male + tau_old + tau_facebook, 
+                                                  is_male=1, 
+                                                  is_female=0, 
+                                                  is_old=1, 
+                                                  is_facebook=1)]
+  d[treat_condition == 'female-young-facebook', ':=' (avg_bias = y0 + tau_female + tau_facebook, 
+                                                      is_male=0, 
+                                                      is_female=1, 
+                                                      is_old=0, 
+                                                      is_facebook=1)]
+  d[treat_condition == 'female-old-facebook', ':=' (avg_bias = y0 + tau_female + tau_old + tau_facebook, 
+                                                    is_male=0, 
+                                                    is_female=1, 
+                                                    is_old=1, 
+                                                    is_facebook=1)]
+  d[treat_condition == 'na-young-youtube', ':=' (avg_bias = y0, 
+                                                 is_male=0, 
+                                                 is_female=0, 
+                                                 is_old=0, 
+                                                 is_facebook=0)]
+  d[treat_condition == 'na-old-youtube', ':=' (avg_bias = y0 + tau_old, 
+                                               is_male=0, 
+                                               is_female=0, 
+                                               is_old=1, 
+                                               is_facebook=0)]
+  d[treat_condition == 'male-young-youtube', ':=' (avg_bias = y0 + tau_male, 
+                                                   is_male=1, 
+                                                   is_female=0, 
+                                                   is_old=0, 
+                                                   is_facebook=0)]
+  d[treat_condition == 'male-old-youtube', ':=' (avg_bias = y0 + tau_male + tau_old, 
+                                                 is_male=1, 
+                                                 is_female=0, 
+                                                 is_old=1, 
+                                                 is_facebook=0)]
+  d[treat_condition == 'female-young-youtube', ':=' (avg_bias = y0 + tau_female, 
+                                                     is_male=0, 
+                                                     is_female=1, 
+                                                     is_old=0, 
+                                                     is_facebook=0)]
+  d[treat_condition == 'female-old-youtube',   ':=' (avg_bias = y0 + tau_female + tau_old, 
+                                                     is_male=0, 
+                                                     is_female=1, 
+                                                     is_old=1, 
+                                                     is_facebook=0)]
+  
+  return_columns <- c('is_male', 'is_female', 'is_old', 'is_facebook', 'avg_bias')
+  return(d[ , ..return_columns])
+}
+```
+
+Next, we created a function that uses the newly generated experimental data to produce multiple outcomes for power, varying by sample size. This was accomplished by collecting 1,000 p-values for each percentage of sample size taken from the experimental data. The percentages ranged from 10% to 200% of the original sample size of 126. The actual power calculation was performed at each sample size value by creating 1,000 linear regression models with the covariates and saving the associated p-values for each one. Power for each covariate was determined by the finding the fraction of models that resulted in p-values at or below our statistical significance level of 0.05.
+
+```{r, echo=FALSE}
+SimulatePower <- function(experiment_data){
+  #' Collects 1,000 p-values for each percentage of sample size taken from the
+  #' experiment data.
+  #' 
+  #' Args:
+  #'  experiment_data: The simulated data collected from the experiment.
+  #'  
+  #' Returns:
+  #'  res: A dataframe containing the power of each sample percentage for each
+  #'    covariate.
+  # Defining the percentage as a sequence starting at 0.1 to 2, step size = 0.1
+  percentages_to_sample <- seq(0.1, 2, by=0.1)
+  
+  # To store the power of each simulation.
+  intercept_powers <- rep(NA, length(percentages_to_sample))
+  is_male_powers <- rep(NA, length(percentages_to_sample))
+  is_female_powers <- rep(NA, length(percentages_to_sample))
+  is_old_powers <- rep(NA, length(percentages_to_sample))
+  is_facebook_powers <- rep(NA, length(percentages_to_sample))
+  
+  j <- 1
+  for (p in percentages_to_sample) {
+    
+    # To store the p-values for this simulation.
+    intercept_p_values <- rep(NA, 1000)
+    is_male_p_values <- rep(NA, 1000)
+    is_female_p_values <- rep(NA, 1000)
+    is_old_p_values <- rep(NA, 1000)
+    is_facebook_p_values <- rep(NA, 1000)
+    for (i in 1:1000) {
+      sampled_data <- experiment_data[
+        experiment_data[ , .(sample(.I, size = .N * p, replace = TRUE))]$V1]
+      model <- lm(avg_bias ~ is_male + is_female + is_old + is_facebook, sampled_data)
+      
+      intercept_p_values[i] <- summary(model)$coefficients[,4][1]
+      is_male_p_values[i] <- summary(model)$coefficients[,4][2]
+      is_female_p_values[i] <- summary(model)$coefficients[,4][3]
+      is_old_p_values[i] <- summary(model)$coefficients[,4][4]
+      is_facebook_p_values[i] <- summary(model)$coefficients[,4][5]
+    }
+    # Storing the power of this simulation.
+    intercept_powers[j] <- length(intercept_p_values[intercept_p_values <= 0.05]
+                            ) / length(intercept_p_values)
+    is_male_powers[j] <- length(is_male_p_values[is_male_p_values <= 0.05]
+                                ) / length(is_male_p_values)
+    is_female_powers[j] <- length(is_female_p_values[is_female_p_values <= 0.05]
+                                  ) / length(is_female_p_values)
+    is_old_powers[j] <- length(is_old_p_values[is_old_p_values <= 0.05]
+                               ) / length(is_old_p_values)
+    is_facebook_powers[j] <- length(is_facebook_p_values[is_facebook_p_values <= 0.05]
+                                    ) / length(is_facebook_p_values)
+    
+    j <- j + 1
+  }
+  
+  # Combining results into a data frame.
+  res <- data.frame(percentages_to_sample, intercept_powers, is_male_powers,
+                    is_female_powers, is_old_powers, is_facebook_powers)
+  return(res)
+}
+```
+
+Below are the three different scenarios the team explored. We aimed to examine how our experiment's power would change if it resulted in different treatment effect means. The tau distributions were created using the adjusted mean value, a constant standard deviation of 3 because it best resembled the data, and the estimated sample size. The functions to generate experimental data and then calculate power were called, resulting in power lists for our 'Low Treatment Effect', 'Regular treatment Effect' and 'Large Treatment Effect' scenarios.
+
+# Low Treatment Effect
+```{r}
+y0 <- rnorm(estimated_sample_size, mean = 0, sd = 3)
+tau_male <- rnorm(estimated_sample_size, mean = 3, sd = 3)
+tau_female <- rnorm(estimated_sample_size, mean = -1, sd = 3)
+tau_old <- rnorm(estimated_sample_size, mean = 2, sd = 3)
+tau_facebook <- rnorm(estimated_sample_size, mean = -1, sd = 3) 
+
+experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
+
+low_effect <- SimulatePower(experiment_data)
+```
+
+# Regular Treatment Effect
+```{r}
+y0 <- rnorm(estimated_sample_size, mean = 0, sd = 3)
+tau_male <- rnorm(estimated_sample_size, mean = 5, sd = 3)
+tau_female <- rnorm(estimated_sample_size, mean = -3, sd = 3)
+tau_old <- rnorm(estimated_sample_size, mean = 4, sd = 3)
+tau_facebook <- rnorm(estimated_sample_size, mean = -3, sd = 3) 
+
+experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
+
+regular_effect <- SimulatePower(experiment_data)
+```
+
+# Large Treatment Effect
+```{r}
+y0 <- rnorm(estimated_sample_size, mean = 0, sd = 3)
+tau_male <- rnorm(estimated_sample_size, mean = 7, sd = 3)
+tau_female <- rnorm(estimated_sample_size, mean = -5, sd = 3)
+tau_old <- rnorm(estimated_sample_size, mean = 6, sd = 3)
+tau_facebook <- rnorm(estimated_sample_size, mean = -5, sd = 3) 
+
+experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
+
+large_effect <- SimulatePower(experiment_data)
+```
+
+# Sample Size and Power
+```{r, echo=FALSE}
+low_effect$Effect <- 'Low'
+regular_effect$Effect <- 'Regular'
+large_effect$Effect <- 'Large'
+data <- rbind(low_effect, regular_effect, large_effect)
+
+is_male <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_male_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Male") + theme(plot.title = element_text(hjust = 0.5))
+is_female <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_female_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Female") + theme(plot.title = element_text(hjust = 0.5))
+is_old <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_old_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Old") + theme(plot.title = element_text(hjust = 0.5))
+is_facebook <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_facebook_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Facebook") + theme(plot.title = element_text(hjust = 0.5))
+plot_list <- list(is_male, is_female, is_old, is_facebook)
+grid.arrange(is_male, is_female, is_old, is_facebook, nrow=2,top=("Relationship between Sample Size and Power"))
+```
+The relationship between sample size and power for each covariate is highlighted in the graphs above. Our existing experimental targets are to generate a sample size of 126 and to achieve a power of 80% or greater. For most of these covariates, it is evident that a Low treatment effect will not allow us to hit our power goal. If our treatment effects at the conclusion of this experiment turn out to be more aligned with the Regular and Large effects that we simulated, we would be able to generate a power of greater than 80% with a sample of 126. We can conclude that our current experimental framework should allow us to successfully reject the null hypothesis of no effect, if indicated by the result. Our intention is to use this same statistical technique to calculate the power for our real experimental data and findings. 
