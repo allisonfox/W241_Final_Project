@@ -17,7 +17,9 @@ library(ggplot2)
 library(gridExtra)
 ```
 
-The team conducted a power analysis of the experiment by simulating the data generating process in three separate outcome scenarios. The purpose of the analysis was to ensure an adequate amount of samples are collected to generate enough power to properly reject the null hypothesis of no effect. The three scenarios that were explored were related to the expected treatment effect of our age, gender, and news platform (Youtube vs Facebook) covariates. In each subsequent simulation the magnitude of the effects increased, which was the political news bias score, while the standard deviations remained constant. 
+# Introduction
+
+The team conducted a power analysis of the experiment by simulating the data generating process in three separate outcome scenarios. The purpose of the analysis was to ensure an adequate amount of samples are collected to generate enough power to properly reject the null hypothesis of no effect. The three scenarios that were explored were related to the expected treatment effect of our age, gender, and news platform (Youtube vs Facebook) covariates. In each subsequent simulation the magnitude of the effects increased, which was the political news bias score, while the standard deviations remained constant. Measurements of bias used for the experiment range from -35 to 35 with left leaning values being <=0 and right leaning >=0.
 
 Assumed treatment effects used in the simulations were influenced by the findings of a Pew Research article (https://www.pewresearch.org/fact-tank/2020/04/01/americans-main-sources-for-political-news-vary-by-party-and-age/). The article suggests there are demographic differences apparent among those who rely on left or right leaning news sources. More specifically, Fox News is one of the most well known Republican leaning sources and it's viewership is predominantly male and older individuals. The rest of the news sources outlined in the article were Democratic leaning and almost all had majority female viewers. This evidence aided in setting the baseline treatment effect directions and magnitudes.
 
@@ -26,6 +28,8 @@ Assumed treatment effects used in the simulations were influenced by the finding
 # This will hold true for all simulations.
 estimated_sample_size <- 126
 ```
+
+# Implementation and Analysis
 
 The first step of the power analysis was to simulate the data generating process. We created a function to produce expected experimental data given an estimate of the co-variate treatment effects (tau) and a baseline sample size of 126.
 
@@ -209,7 +213,7 @@ SimulatePower <- function(experiment_data){
 }
 ```
 
-Below are the three different scenarios the team explored. We aimed to examine how our experiment's power would change if it resulted in different treatment effect means. The tau distributions were created using the adjusted mean value, a constant standard deviation of 3 because it best resembled the data, and the estimated sample size. The functions to generate experimental data and then calculate power were called, resulting in power lists for our 'Low Treatment Effect', 'Regular treatment Effect' and 'Large Treatment Effect' scenarios.
+Below are the three different scenarios the team explored. We aimed to examine how our experiment's power would change if it resulted in different treatment effect means. The tau distributions were created using the adjusted mean value, a constant standard deviation of 3 because it best resembled the data, and the estimated sample size. The functions to generate experimental data and then calculate power were called, resulting in power lists for our 'Low Treatment Effect', 'Regular Treatment Effect' and 'Large Treatment Effect' scenarios.
 
 # Low Treatment Effect
 ```{r}
@@ -218,11 +222,14 @@ tau_male <- rnorm(estimated_sample_size, mean = 3, sd = 3)
 tau_female <- rnorm(estimated_sample_size, mean = -1, sd = 3)
 tau_old <- rnorm(estimated_sample_size, mean = 2, sd = 3)
 tau_facebook <- rnorm(estimated_sample_size, mean = -1, sd = 3) 
+```
 
+```{r, echo=FALSE}
 experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
 
 low_effect <- SimulatePower(experiment_data)
 ```
+
 
 # Regular Treatment Effect
 ```{r}
@@ -231,11 +238,14 @@ tau_male <- rnorm(estimated_sample_size, mean = 5, sd = 3)
 tau_female <- rnorm(estimated_sample_size, mean = -3, sd = 3)
 tau_old <- rnorm(estimated_sample_size, mean = 4, sd = 3)
 tau_facebook <- rnorm(estimated_sample_size, mean = -3, sd = 3) 
+```
 
+```{r, echo=FALSE}
 experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
 
 regular_effect <- SimulatePower(experiment_data)
 ```
+
 
 # Large Treatment Effect
 ```{r}
@@ -244,11 +254,14 @@ tau_male <- rnorm(estimated_sample_size, mean = 7, sd = 3)
 tau_female <- rnorm(estimated_sample_size, mean = -5, sd = 3)
 tau_old <- rnorm(estimated_sample_size, mean = 6, sd = 3)
 tau_facebook <- rnorm(estimated_sample_size, mean = -5, sd = 3) 
+```
 
+```{r, echo=FALSE}
 experiment_data <- CreateData(estimated_sample_size, y0, tau_male, tau_female, tau_old, tau_facebook)
 
 large_effect <- SimulatePower(experiment_data)
 ```
+
 
 # Sample Size and Power
 ```{r, echo=FALSE}
