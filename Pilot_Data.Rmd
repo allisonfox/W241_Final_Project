@@ -1,0 +1,41 @@
+---
+title: "Pilot Data"
+author: 'W241: Fox, George, McCleary'
+date: "7/7/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(tidyr)
+```
+
+# Load and Merge Data
+```{r}
+pilot_data_hannah <- readxl::read_xlsx("w241 Final Project Data.xlsx", sheet = 2, n_max = 48)
+pilot_data_allison <- readxl::read_xlsx("w241 Final Project Data.xlsx", sheet = 3, n_max = 48)
+pilot_data_carlie <- readxl::read_xlsx("w241 Final Project Data.xlsx", sheet = 4, n_max = 48)
+pilot_data_carlie <- pilot_data_carlie[,c(1:51)]
+pilot_data <- rbind(pilot_data_hannah, pilot_data_allison, pilot_data_carlie)
+```
+
+# Prepare data for plot
+```{r, warning = FALSE}
+pilot_data <- pilot_data %>% pivot_longer(cols = c(`Average Bias`, `Average Reliability`), 
+                                          names_to = 'Metric', values_to = 'Value')
+pilot_data$Value <- as.numeric(pilot_data$Value)
+```
+
+# Plot Data
+```{r, warning = FALSE} 
+ggplot(pilot_data, aes(fill=Website, y = Value, x = Metric)) + 
+  geom_bar(position='dodge', stat='identity') + 
+  labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube")
+```
+
