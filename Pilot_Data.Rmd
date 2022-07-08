@@ -27,15 +27,18 @@ pilot_data <- rbind(pilot_data_hannah, pilot_data_allison, pilot_data_carlie)
 
 # Prepare data for plot
 ```{r, warning = FALSE}
-pilot_data <- pilot_data %>% pivot_longer(cols = c(`Average Bias`, `Average Reliability`), 
+pilot_data <- pilot_data[,c(8,45,47)] %>% pivot_longer(cols = c(`Average Bias`, `Average Reliability`), 
                                           names_to = 'Metric', values_to = 'Value')
 pilot_data$Value <- as.numeric(pilot_data$Value)
+pilot_data$Website <- as.factor(pilot_data$Website)
+pilot_data$Metric <- as.factor(pilot_data$Metric)
 ```
 
 # Plot Data
 ```{r, warning = FALSE} 
-ggplot(pilot_data, aes(fill=Website, y = Value, x = Metric)) + 
-  geom_bar(position='dodge', stat='identity') + 
-  labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube")
+ggplot(pilot_data, aes(fill = Website, y = Value, x = Metric)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
+  labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube") +
+  scale_y_continuous(limits = c(-10,45), breaks = c(-10,0,10,20,30,40))
 ```
 
