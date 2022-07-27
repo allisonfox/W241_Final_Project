@@ -5,7 +5,7 @@ date: "7/27/2022"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -15,6 +15,9 @@ library(readxl)
 library(ggplot2)
 library(tidyr)
 library(stringi)
+library(sandwich)
+library(lmtest)
+library(stargazer)
 ```
 
 # Load and Merge Data
@@ -49,4 +52,38 @@ ggplot(final_data_plot, aes(fill = Website, y = Value, x = Metric)) +
   labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube") +
   scale_y_continuous(limits = c(-10,45), breaks = c(-10,0,10,20,30,40))
 ```
+
+# Create Covariates
+```{r}
+final_data_long$is_male <- ifelse(final_data_long$Gender == "Male", 1, 0)
+final_data_long$is_female <- ifelse(final_data_long$Gender == "Female", 1, 0)
+final_data_long$is_old <- ifelse(final_data_long$`Age Group` == "Old", 1, 0)
+final_data_long$is_facebook <- ifelse(final_data_long$Website == "Facebook", 1, 0)
+```
+
+
+# Run Bias Model
+```{r}
+bias_model <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
+                   as.factor(Researcher), 
+                   final_data_long %>% filter(Metric == "Average Bias"))
+coef <- coeftest(bias_model, vcov. = vcovHC(bias_model))
+coef
+```
+
+
+# Run Reliability Model
+```{r}
+reliability_model <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
+                   as.factor(Researcher), 
+                   final_data_long %>% filter(Metric == "Average Reliability"))
+coef <- coeftest(reliability_model, vcov. = vcovHC(reliability_model))
+coef
+```
+
+# Stargazer Outputs
+```{r, warning=FALSE}
+stargazer(bias_model, reliability_model, title = "Table 1: Average Bias and Reliability Regression Models", out = "table1.txt")
+```
+
 
