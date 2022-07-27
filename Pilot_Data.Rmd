@@ -18,9 +18,9 @@ library(tidyr)
 
 # Load and Merge Data
 ```{r}
-pilot_data_hannah <- readxl::read_xlsx("w241 Final Project Data.xlsx", sheet = 2, n_max = 48)
-pilot_data_allison <- readxl::read_xlsx("w241 Final Project Data.xlsx", sheet = 3, n_max = 48)
-pilot_data_carlie <- readxl::read_xlsx("w241 Final Project Data.xlsx", sheet = 4, n_max = 48)
+pilot_data_hannah <- readxl::read_xlsx("w241 Final Project Data_Pilot.xlsx", sheet = 2, n_max = 48)
+pilot_data_allison <- readxl::read_xlsx("w241 Final Project Data_Pilot.xlsx", sheet = 3, n_max = 48)
+pilot_data_carlie <- readxl::read_xlsx("w241 Final Project Data_Pilot.xlsx", sheet = 4, n_max = 48)
 pilot_data_carlie <- pilot_data_carlie[,c(1:51)]
 pilot_data <- rbind(pilot_data_hannah, pilot_data_allison, pilot_data_carlie)
 ```
