@@ -1,0 +1,125 @@
+---
+title: "Visualization"
+author: 'W241: Fox, George, McCleary'
+date: "7/7/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(tidyr)
+```
+
+# Load and Merge Data
+```{r}
+final_data_hannah <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 2, n_max = 85)
+final_data_allison <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 3, n_max = 85)
+final_data_carlie <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 4, n_max = 85)
+final_data_carlie <- final_data_carlie[,c(1:51)]
+final_data <- rbind(final_data_hannah, final_data_allison, final_data_carlie)
+final_data_clean <- readxl::read_xlsx("Final_Data_clean.xlsx")
+```
+
+
+# Clean data
+```{r, warning = FALSE}
+# pivot longer
+final_data_long <- final_data[,c(1:8,45,47)] %>% pivot_longer(cols = c(`Average Bias`, `Average Reliability`), 
+                                          names_to = 'Metric', values_to = 'Value')
+
+# convert variable types
+final_data_long$Value <- as.numeric(final_data_long$Value)
+final_data_long$Website <- as.factor(final_data_long$Website)
+final_data_long$Metric <- as.factor(final_data_long$Metric)
+
+# update sample ID from email address since its not reading in properly
+final_data_long$`Sample ID` <- stringi::stri_sub(final_data_long$`GMail Address`, 18, 20)
+```
+
+# Plot average bias and reliability of sources
+```{r, warning = FALSE} 
+ggplot(final_data_clean, aes(fill = Website, y = Value, x = Metric)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
+  labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube") +
+  scale_y_continuous(limits = c(-10,45), breaks = c(-10,0,10,20,30,40))
+```
+```{r}
+final_data
+```
+```{r}
+final_data_clean
+```
+```{r, warning = FALSE} 
+#Subset data to bias metrics
+bias_data <- filter(final_data_clean, Metric == 'Average Bias')
+
+#Plot average bias by Gender 
+ggplot(bias_data, aes(fill = Website, y = Value, x = Gender)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
+  labs(title = "Average News Source Bias on Facebook and Youtube by Gender") +
+  scale_y_continuous(limits = c(-10,10), breaks = c(-10,0,10))
+```
+```{r, warning = FALSE} 
+#Plot average bias by age
+ggplot(bias_data, aes(fill = Website, y = Value, x = `Age Group`)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
+  labs(title = "Average News Source Bias on Facebook and Youtube by Age") +
+  scale_y_continuous(limits = c(-10,10), breaks = c(-10,0,10))
+```
+
+```{r, warning = FALSE} 
+#Subset data to reliability metrics
+reliability_data <- filter(final_data_clean, Metric == 'Average Reliability')
+
+#Plot avg reliability by gender
+ggplot(reliability_data, aes(fill = Website, y = Value, x = Gender)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
+  labs(title = "Average News Source Reliability on Facebook and Youtube by Gender") +
+  scale_y_continuous(limits = c(-10,60), breaks = c(-10,0,10,20,30,40,50,60))
+```
+```{r, warning = FALSE} 
+#Plot avg reliability by age
+ggplot(reliability_data, aes(fill = Website, y = Value, x = `Age Group`)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
+  labs(title = "Average News Source Reliability on Facebook and Youtube by Gender") +
+  scale_y_continuous(limits = c(-10,60), breaks = c(-10,0,10,20,30,40,50,60))
+```
+```{r}
+#Subset data to bias dataset so only one row per account
+bias_data
+blocked_accounts <- filter(bias_data, is.na(Value))
+blocked_accounts
+
+#Plot count of blocked accounts by age and gender
+blocked_accounts <- blocked_accounts %>% mutate(row_count=1)
+
+ggplot(blocked_accounts, aes(fill = Website,y = row_count, x = `Age Group`)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'sum') + 
+  labs(title = "Histogram of Blocked Facebook Accounts by Age") +
+  scale_y_continuous(limits = c(0,40), breaks = c(0,10,20,30,40))
+
+```
+
+```{r}
+#Blocked facebook accounts by gender
+ggplot(blocked_accounts, aes(fill = Website,y = row_count, x = Gender)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'sum') + 
+  labs(title = "Histogram of Blocked Facebook Accounts by Gender") +
+  scale_y_continuous(limits = c(0,30), breaks = c(0,10,20,30))
+```
+  
+```{r}
+#Line graph of block accounts over time
+blocked_sum <- blocked_accounts %>% count(`Due Date`, row_count)
+
+ggplot(blocked_sum, aes(x=`Due Date`, y=n, group=1)) +
+  geom_line()+
+  geom_point()+labs(title = "Blocked Facebook Accounts over Time") + ylab("Count of Blocked Accounts")
+```
+  
