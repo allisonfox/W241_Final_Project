@@ -1,0 +1,54 @@
+---
+title: "Regression Model"
+author: 'W241: Fox, George, McCleary'
+date: "7/27/2022"
+output: pdf_document
+---
+
+```{r load packages, message = FALSE, include = FALSE}
+list.of.packages <- c("data.table", "sandwich", "lmtest", "ggplot2", "stargazer")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
+library(data.table)
+library(sandwich)
+library(lmtest)
+library(ggplot2) 
+library(stargazer)
+```
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+d <- data.table(readxl::read_xlsx("Final_Data_clean.xlsx"))
+d[is.na(Value), account_disabled := T]
+d[!is.na(Value), account_disabled := F]
+d
+```
+```{r}
+# Is there differential attrition between Facebook and Google?
+website_diff_attrition_model <- d[, lm(account_disabled ~ as.factor(Website))]
+website_diff_attrition_coeftest <- coeftest(website_diff_attrition_model, 
+                                            vcovHC(website_diff_attrition_model))
+```
+```{r}
+# Stargazer output.
+stargazer(website_diff_attrition_model, header=F)
+```
+
+```{r}
+# Does demographic information influence Facebook's decision to ban an account?
+facebook_diff_attrition_model <- d[Website=="Facebook", lm(account_disabled ~ as.factor(Gender) + as.factor(`Age Group`))]
+
+facebook_diff_attrition_coeftest <- coeftest(facebook_diff_attrition_model, 
+                                            vcovHC(facebook_diff_attrition_model))
+```
+
+```{r}
+# Stargazer output.
+stargazer(facebook_diff_attrition_model, header=F)
+```
+
+Summary: Attrition is significantly different between YouTube and Facebook, however, Facebook attrition is not significantly different due to any of the collected demographic variables.
