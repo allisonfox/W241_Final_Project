@@ -24,6 +24,9 @@ final_data_carlie <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", she
 final_data_carlie <- final_data_carlie[,c(1:51)]
 final_data <- rbind(final_data_hannah, final_data_allison, final_data_carlie)
 final_data_clean <- readxl::read_xlsx("Final_Data_clean.xlsx")
+source_data <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=1)
+source_data_youtube <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=2)
+source_data_facebook <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=3)
 ```
 
 
@@ -49,12 +52,7 @@ ggplot(final_data_clean, aes(fill = Website, y = Value, x = Metric)) +
   labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube") +
   scale_y_continuous(limits = c(-10,45), breaks = c(-10,0,10,20,30,40))
 ```
-```{r}
-final_data
-```
-```{r}
-final_data_clean
-```
+
 ```{r, warning = FALSE} 
 #Subset data to bias metrics
 bias_data <- filter(final_data_clean, Metric == 'Average Bias')
@@ -92,9 +90,7 @@ ggplot(reliability_data, aes(fill = Website, y = Value, x = `Age Group`)) +
 ```
 ```{r}
 #Subset data to bias dataset so only one row per account
-bias_data
 blocked_accounts <- filter(bias_data, is.na(Value))
-blocked_accounts
 
 #Plot count of blocked accounts by age and gender
 blocked_accounts <- blocked_accounts %>% mutate(row_count=1)
@@ -122,4 +118,38 @@ ggplot(blocked_sum, aes(x=`Due Date`, y=n, group=1)) +
   geom_line()+
   geom_point()+labs(title = "Blocked Facebook Accounts over Time") + ylab("Count of Blocked Accounts")
 ```
+```{r}
+sources_top <- source_data %>% slice(1:10)
+
+plot1 <- ggplot(sources_top, aes(fill = `bias label`,y = Count, x = reorder(Source, Count))) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'sum') + 
+  labs(title = "Top News Sources") +
+  scale_y_continuous(limits = c(0,175), breaks = c(0,50,100,150)) + coord_flip()
+
+plot1 + scale_fill_manual(breaks = c("Skews Right", "Skews Left", "Middle"), 
+                       values=c("red", "blue", "green")) + xlab("Sources")
+```
+```{r}
+#Facebook top sources
+sources_top_fb <- source_data_facebook %>% slice(1:10)
+
+plot2 <- ggplot(sources_top_fb, aes(fill = `bias label`,y = Count, x = reorder(Source, Count))) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'sum') + 
+  labs(title = "Top Facebook News Sources") +
+  scale_y_continuous(limits = c(0,100), breaks = c(0,50,100)) + coord_flip()
+plot2 + scale_fill_manual(breaks = c("Skews Right", "Skews Left", "Middle"), 
+                       values=c("red", "blue", "green"))+ xlab("Sources")
+```
   
+```{r}
+#Google top sources
+sources_top_yt <- source_data_youtube %>% slice(1:10)
+
+plot3 <- ggplot(sources_top_yt, aes(fill = `bias label`,y = Count, x = reorder(Source, Count))) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'sum') + 
+  labs(title = "Top Youtube News Sources") + 
+  scale_y_continuous(limits = c(0,150), breaks = c(0,50,100,150)) + coord_flip()
+plot3 + scale_fill_manual(breaks = c("Skews Right", "Skews Left", "Middle"), 
+                       values=c("red", "blue", "green")) + xlab("Sources")
+```
+
