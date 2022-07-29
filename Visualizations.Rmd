@@ -16,34 +16,14 @@ library(ggplot2)
 library(tidyr)
 ```
 
-# Load and Merge Data
+# Load Clean Data
 ```{r}
-final_data_hannah <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 2, n_max = 85)
-final_data_allison <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 3, n_max = 85)
-final_data_carlie <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 4, n_max = 85)
-final_data_carlie <- final_data_carlie[,c(1:51)]
-final_data <- rbind(final_data_hannah, final_data_allison, final_data_carlie)
 final_data_clean <- readxl::read_xlsx("Final_Data_clean.xlsx")
 source_data <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=1)
 source_data_youtube <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=2)
 source_data_facebook <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=3)
 ```
 
-
-# Clean data
-```{r, warning = FALSE}
-# pivot longer
-final_data_long <- final_data[,c(1:8,45,47)] %>% pivot_longer(cols = c(`Average Bias`, `Average Reliability`), 
-                                          names_to = 'Metric', values_to = 'Value')
-
-# convert variable types
-final_data_long$Value <- as.numeric(final_data_long$Value)
-final_data_long$Website <- as.factor(final_data_long$Website)
-final_data_long$Metric <- as.factor(final_data_long$Metric)
-
-# update sample ID from email address since its not reading in properly
-final_data_long$`Sample ID` <- stringi::stri_sub(final_data_long$`GMail Address`, 18, 20)
-```
 
 # Plot average bias and reliability of sources
 ```{r, warning = FALSE} 
@@ -61,14 +41,14 @@ bias_data <- filter(final_data_clean, Metric == 'Average Bias')
 ggplot(bias_data, aes(fill = Website, y = Value, x = Gender)) + 
   geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
   labs(title = "Average News Source Bias on Facebook and Youtube by Gender") +
-  scale_y_continuous(limits = c(-10,10), breaks = c(-10,0,10))
+  scale_y_continuous(limits = c(-5,5), breaks = c(-5,0,5))
 ```
 ```{r, warning = FALSE} 
 #Plot average bias by age
 ggplot(bias_data, aes(fill = Website, y = Value, x = `Age Group`)) + 
   geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
   labs(title = "Average News Source Bias on Facebook and Youtube by Age") +
-  scale_y_continuous(limits = c(-10,10), breaks = c(-10,0,10))
+  scale_y_continuous(limits = c(-5,5), breaks = c(-5,0,5))
 ```
 
 ```{r, warning = FALSE} 
