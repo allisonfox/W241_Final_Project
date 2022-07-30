@@ -6,7 +6,7 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r, include = FALSE}
@@ -47,7 +47,7 @@ final_data_long$`Sample ID` <- stringi::stri_sub(final_data_long$`GMail Address`
 
 # Plot Data
 ```{r, warning = FALSE} 
-ggplot(final_data_plot, aes(fill = Website, y = Value, x = Metric)) + 
+ggplot(final_data_long, aes(fill = Website, y = Value, x = Metric)) + 
   geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
   labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube") +
   scale_y_continuous(limits = c(-10,45), breaks = c(-10,0,10,20,30,40))
@@ -82,8 +82,9 @@ coef
 ```
 
 # Stargazer Outputs
-```{r, warning=FALSE}
-stargazer(bias_model, reliability_model, title = "Table 1: Average Bias and Reliability Regression Models", out = "table1.txt")
+```{r, warning=FALSE, results='asis'}
+stargazer(bias_model, reliability_model, 
+          title = "Table 1: Average Bias and Reliability Regression Models", type = 'latex')
 ```
 
 
