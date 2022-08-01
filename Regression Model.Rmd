@@ -84,7 +84,97 @@ coef
 # Stargazer Outputs
 ```{r, warning=FALSE, results='asis'}
 stargazer(bias_model, reliability_model, 
-          title = "Table 1: Average Bias and Reliability Regression Models", type = 'latex')
+          title = "Average Bias and Reliability Regression Models", header = FALSE)
 ```
 
+# Latex Output 1
 
+\begin{table}[!htbp] \centering 
+  \caption{Average Bias and Reliability Regression Models} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{Value} \\ 
+\\[-1.8ex] & (Bias) & (Reliability)\\ 
+\hline \\[-1.8ex] 
+ is\_male & 0.328 & $-$0.355$^{*}$ \\ 
+  & (0.286) & (0.182) \\ 
+  & & \\ 
+ is\_female & 0.157 & $-$0.265 \\ 
+  & (0.288) & (0.183) \\ 
+  & & \\ 
+ is\_old & $-$0.200 & 0.150 \\ 
+  & (0.233) & (0.148) \\ 
+  & & \\ 
+ is\_facebook & $-$1.703$^{***}$ & $-$0.390$^{**}$ \\ 
+  & (0.244) & (0.155) \\ 
+  & & \\ 
+ Constant & $-$3.927$^{***}$ & 44.313$^{***}$ \\ 
+  & (0.412) & (0.262) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 200 & 200 \\ 
+R$^{2}$ & 0.299 & 0.135 \\ 
+Adjusted R$^{2}$ & 0.254 & 0.079 \\ 
+Residual Std. Error (df = 187) & 1.641 & 1.043 \\ 
+F Statistic (df = 12; 187) & 6.645$^{***}$ & 2.427$^{***}$ \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+# Latex Output 2
+
+\begin{table}[!htbp] \centering 
+  \caption{Average Bias and Reliability Regression Models} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{Value} \\ 
+\\[-1.8ex] & (Bias) & (Reliability)\\ 
+\hline \\[-1.8ex] 
+ as.factor(`Due Date`)2022-06-19 & 0.221 & 0.179 \\ 
+  & (0.417) & (0.265) \\ 
+  & & \\ 
+ as.factor(`Due Date`)2022-06-26 & 1.145$^{***}$ & 0.336 \\ 
+  & (0.433) & (0.275) \\ 
+  & & \\ 
+ as.factor(`Due Date`)2022-07-03 & 0.610 & 0.188 \\ 
+  & (0.417) & (0.265) \\ 
+  & & \\ 
+ as.factor(`Due Date`)2022-07-10 & 1.055$^{**}$ & 0.567$^{**}$ \\ 
+  & (0.439) & (0.279) \\ 
+  & & \\ 
+ as.factor(`Due Date`)2022-07-17 & 1.481$^{***}$ & 0.453$^{*}$ \\ 
+  & (0.421) & (0.268) \\ 
+  & & \\ 
+ as.factor(`Due Date`)2022-07-24 & 1.370$^{***}$ & 0.117 \\ 
+  & (0.450) & (0.286) \\ 
+  & & \\ 
+ as.factor(Researcher)Carlie McCleary & 0.134 & $-$0.511$^{***}$ \\ 
+  & (0.289) & (0.184) \\ 
+  & & \\ 
+ as.factor(Researcher)Hannah George & $-$0.041 & 0.079 \\ 
+  & (0.281) & (0.179) \\ 
+  & & \\ 
+ Constant & $-$3.927$^{***}$ & 44.313$^{***}$ \\ 
+  & (0.412) & (0.262) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 200 & 200 \\ 
+R$^{2}$ & 0.299 & 0.135 \\ 
+Adjusted R$^{2}$ & 0.254 & 0.079 \\ 
+Residual Std. Error (df = 187) & 1.641 & 1.043 \\ 
+F Statistic (df = 12; 187) & 6.645$^{***}$ & 2.427$^{***}$ \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
