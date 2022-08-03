@@ -21,7 +21,7 @@ library(stargazer)
 ```
 
 # Load and Merge Data
-```{r}
+```{r, include=TRUE}
 final_data_hannah <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 2, n_max = 85)
 final_data_allison <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 3, n_max = 85)
 final_data_carlie <- readxl::read_xlsx("w241 Final Project Data_Final.xlsx", sheet = 4, n_max = 85)
@@ -31,7 +31,7 @@ final_data <- rbind(final_data_hannah, final_data_allison, final_data_carlie)
 
 
 # Clean data
-```{r, warning = FALSE}
+```{r, warning = FALSE, include=TRUE}
 # pivot longer
 final_data_long <- final_data[,c(1:8,45,47)] %>% pivot_longer(cols = c(`Average Bias`, `Average Reliability`), 
                                           names_to = 'Metric', values_to = 'Value')
@@ -45,136 +45,94 @@ final_data_long$Metric <- as.factor(final_data_long$Metric)
 final_data_long$`Sample ID` <- stringi::stri_sub(final_data_long$`GMail Address`, 18, 20)
 ```
 
-# Plot Data
-```{r, warning = FALSE} 
-ggplot(final_data_long, aes(fill = Website, y = Value, x = Metric)) + 
-  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
-  labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube") +
-  scale_y_continuous(limits = c(-10,45), breaks = c(-10,0,10,20,30,40))
-```
 
 # Create Covariates
-```{r}
+```{r, include=TRUE}
 final_data_long$is_male <- ifelse(final_data_long$Gender == "Male", 1, 0)
 final_data_long$is_female <- ifelse(final_data_long$Gender == "Female", 1, 0)
 final_data_long$is_old <- ifelse(final_data_long$`Age Group` == "Old", 1, 0)
 final_data_long$is_facebook <- ifelse(final_data_long$Website == "Facebook", 1, 0)
 ```
 
+# Create Complete Cases Dataset
+```{r, include=TRUE}
+# create the dataset of only the accounts for which we have Facebook and YouTube
+final_data_long_filt <- final_data_long %>% 
+  dplyr::filter(is.na(Value) == FALSE)
+final_data_long_filt <- final_data_long_filt %>%
+  dplyr::group_by(final_data_long_filt$`GMail Address`) %>% 
+  dplyr::filter(n() > 2)
+```
 
-# Run Bias Model
+
+
+# Run Bias Models
 ```{r}
-bias_model <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
+# bias model with no covariates
+bias_model_short <- lm(Value ~ is_male + is_female + is_old + is_facebook, 
+                   final_data_long %>% filter(Metric == "Average Bias"))
+coef <- coeftest(bias_model_short, vcov. = vcovHC(bias_model_short))
+coef
+```
+
+```{r}
+# bias model with covariates
+bias_model_long <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
                    as.factor(Researcher), 
                    final_data_long %>% filter(Metric == "Average Bias"))
-coef <- coeftest(bias_model, vcov. = vcovHC(bias_model))
+coef <- coeftest(bias_model_long, vcov. = vcovHC(bias_model_long))
 coef
 ```
 
 
-# Run Reliability Model
 ```{r}
-reliability_model <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
+# bias model with only complete observations
+bias_model_filt <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
+                   as.factor(Researcher), 
+                   final_data_long_filt %>% filter(Metric == "Average Bias"))
+coef <- coeftest(bias_model_filt, vcov. = vcovHC(bias_model_filt))
+coef
+```
+
+
+# Run Reliability Models
+```{r}
+# reliability model with no covariates
+reliability_model_short <- lm(Value ~ is_male + is_female + is_old + is_facebook, 
+                   final_data_long %>% filter(Metric == "Average Reliability"))
+coef <- coeftest(reliability_model_short, vcov. = vcovHC(reliability_model_short))
+coef
+```
+
+```{r}
+# reliability model with covariates
+reliability_model_long <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
                    as.factor(Researcher), 
                    final_data_long %>% filter(Metric == "Average Reliability"))
-coef <- coeftest(reliability_model, vcov. = vcovHC(reliability_model))
+coef <- coeftest(reliability_model_long, vcov. = vcovHC(reliability_model_long))
 coef
 ```
 
-# Stargazer Outputs
-```{r, warning=FALSE, results='asis'}
-stargazer(bias_model, reliability_model, 
-          title = "Average Bias and Reliability Regression Models", header = FALSE)
+
+```{r}
+# reliability model with only complete observations
+reliability_model_filt <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
+                   as.factor(Researcher), 
+                   final_data_long_filt %>% filter(Metric == "Average Reliability"))
+coef <- coeftest(reliability_model_filt, vcov. = vcovHC(reliability_model_filt))
+coef
 ```
 
-# Latex Output 1
 
-\begin{table}[!htbp] \centering 
-  \caption{Average Bias and Reliability Regression Models} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lcc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-3} 
-\\[-1.8ex] & \multicolumn{2}{c}{Value} \\ 
-\\[-1.8ex] & (Bias) & (Reliability)\\ 
-\hline \\[-1.8ex] 
- is\_male & 0.328 & $-$0.355$^{*}$ \\ 
-  & (0.286) & (0.182) \\ 
-  & & \\ 
- is\_female & 0.157 & $-$0.265 \\ 
-  & (0.288) & (0.183) \\ 
-  & & \\ 
- is\_old & $-$0.200 & 0.150 \\ 
-  & (0.233) & (0.148) \\ 
-  & & \\ 
- is\_facebook & $-$1.703$^{***}$ & $-$0.390$^{**}$ \\ 
-  & (0.244) & (0.155) \\ 
-  & & \\ 
- Constant & $-$3.927$^{***}$ & 44.313$^{***}$ \\ 
-  & (0.412) & (0.262) \\ 
-  & & \\ 
-\hline \\[-1.8ex] 
-Observations & 200 & 200 \\ 
-R$^{2}$ & 0.299 & 0.135 \\ 
-Adjusted R$^{2}$ & 0.254 & 0.079 \\ 
-Residual Std. Error (df = 187) & 1.641 & 1.043 \\ 
-F Statistic (df = 12; 187) & 6.645$^{***}$ & 2.427$^{***}$ \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table} 
+# Stargazer Outputs for Bias Models
+```{r, warning=FALSE, results='asis'}
+stargazer(bias_model_short, bias_model_long, bias_model_filt, 
+          title = "Average Bias Regression Models", header = FALSE)
+```
 
-# Latex Output 2
+# Stargazer Outputs for Reliability Models
+```{r, warning=FALSE, results='asis'}
+stargazer(reliability_model_short, reliability_model_long, reliability_model_filt, 
+          title = "Average Reliability Regression Models", header = FALSE)
+```
 
-\begin{table}[!htbp] \centering 
-  \caption{Average Bias and Reliability Regression Models} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lcc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-3} 
-\\[-1.8ex] & \multicolumn{2}{c}{Value} \\ 
-\\[-1.8ex] & (Bias) & (Reliability)\\ 
-\hline \\[-1.8ex] 
- as.factor(`Due Date`)2022-06-19 & 0.221 & 0.179 \\ 
-  & (0.417) & (0.265) \\ 
-  & & \\ 
- as.factor(`Due Date`)2022-06-26 & 1.145$^{***}$ & 0.336 \\ 
-  & (0.433) & (0.275) \\ 
-  & & \\ 
- as.factor(`Due Date`)2022-07-03 & 0.610 & 0.188 \\ 
-  & (0.417) & (0.265) \\ 
-  & & \\ 
- as.factor(`Due Date`)2022-07-10 & 1.055$^{**}$ & 0.567$^{**}$ \\ 
-  & (0.439) & (0.279) \\ 
-  & & \\ 
- as.factor(`Due Date`)2022-07-17 & 1.481$^{***}$ & 0.453$^{*}$ \\ 
-  & (0.421) & (0.268) \\ 
-  & & \\ 
- as.factor(`Due Date`)2022-07-24 & 1.370$^{***}$ & 0.117 \\ 
-  & (0.450) & (0.286) \\ 
-  & & \\ 
- as.factor(Researcher)Carlie McCleary & 0.134 & $-$0.511$^{***}$ \\ 
-  & (0.289) & (0.184) \\ 
-  & & \\ 
- as.factor(Researcher)Hannah George & $-$0.041 & 0.079 \\ 
-  & (0.281) & (0.179) \\ 
-  & & \\ 
- Constant & $-$3.927$^{***}$ & 44.313$^{***}$ \\ 
-  & (0.412) & (0.262) \\ 
-  & & \\ 
-\hline \\[-1.8ex] 
-Observations & 200 & 200 \\ 
-R$^{2}$ & 0.299 & 0.135 \\ 
-Adjusted R$^{2}$ & 0.254 & 0.079 \\ 
-Residual Std. Error (df = 187) & 1.641 & 1.043 \\ 
-F Statistic (df = 12; 187) & 6.645$^{***}$ & 2.427$^{***}$ \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table} 

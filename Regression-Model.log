@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.5.14)  31 JUL 2022 20:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.5.14)  2 AUG 2022 22:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -291,9 +291,6 @@ File: l3backend-pdftex.def 2022-04-20 L3 backend support: PDF output (pdfTeX)
 
 LaTeX Warning: Label `' multiply defined.
 
-
-LaTeX Warning: Label `' multiply defined.
-
 )
 \openout1 = `Regression-Model.aux'.
 
@@ -402,43 +399,48 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 72.
 (c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<Regression-Model_files/figure-latex/unnamed-chunk-4-1.pdf, id=40, 469.755pt x 325.215pt>
-File: Regression-Model_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type pdf)
-<use Regression-Model_files/figure-latex/unnamed-chunk-4-1.pdf>
-Package pdftex.def Info: Regression-Model_files/figure-latex/unnamed-chunk-4-1.pdf  used on input line 82.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 90.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 89.
 (c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [1
 
-{c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./Regression-Model_files/figure-latex/unnamed-chunk-4-1.pdf>]
+{c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 143.
+(Font)              <10> on input line 229.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 143.
+(Font)              <7> on input line 229.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 143.
-[2] [3] [4] [5] (./Regression-Model.aux)
+(Font)              <5> on input line 229.
+
+Overfull \hbox (53.51047pt too wide) in paragraph at lines 229--286
+ [][] 
+ []
+
+
+Overfull \hbox (40.31601pt too wide) in paragraph at lines 295--352
+ [][] 
+ []
+
+[3] [4] [5] (./Regression-Model.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Regression-Model.out' has not changed.
-(rerunfilecheck)             Checksum: F3D07559EED40D3885A92DB7C475D7B8;1116.
+(rerunfilecheck)             Checksum: 4C555FE29A245B477BB4A3045E91A706;1337.
  ) 
 Here is how much of TeX's memory you used:
- 10475 strings out of 480260
- 165525 string characters out of 5892356
- 478831 words of memory out of 5000000
- 28206 multiletter control sequences out of 15000+600000
+ 10462 strings out of 480260
+ 165140 string characters out of 5892356
+ 479849 words of memory out of 5000000
+ 28198 multiletter control sequences out of 15000+600000
  513133 words of font info for 66 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,10n,63p,250b,468s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 60i,10n,63p,308b,466s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}<c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/Allison Fox/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on Regression-Model.pdf (5 pages, 188312 bytes).
+Output written on Regression-Model.pdf (5 pages, 184890 bytes).
 PDF statistics:
- 144 PDF objects out of 1000 (max. 8388607)
- 113 compressed objects within 2 object streams
- 27 named destinations out of 1000 (max. 500000)
- 78 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 131 PDF objects out of 1000 (max. 8388607)
+ 102 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
+ 65 words of extra memory for PDF output out of 10000 (max. 10000000)
 
