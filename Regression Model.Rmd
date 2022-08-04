@@ -45,6 +45,10 @@ final_data_long$Metric <- as.factor(final_data_long$Metric)
 final_data_long$`Sample ID` <- stringi::stri_sub(final_data_long$`GMail Address`, 18, 20)
 ```
 
+```{r}
+final_data_long <- data.table(readxl::read_xlsx("Final_Data_clean.xlsx"))
+```
+
 
 # Create Covariates
 ```{r, include=TRUE}
@@ -69,7 +73,9 @@ final_data_long_filt <- final_data_long_filt %>%
 # Run Bias Models
 ```{r}
 # bias model with no covariates
-bias_model_short <- lm(Value ~ is_male + is_female + is_old + is_facebook, 
+bias_model_short <- lm(Value ~ is_male + is_female + is_old + is_facebook 
+                       + is_facebook * is_male + is_facebook * is_female 
+                       + is_facebook * is_old, 
                    final_data_long %>% filter(Metric == "Average Bias"))
 coef <- coeftest(bias_model_short, vcov. = vcovHC(bias_model_short))
 coef
@@ -77,8 +83,9 @@ coef
 
 ```{r}
 # bias model with covariates
-bias_model_long <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
-                   as.factor(Researcher), 
+bias_model_long <- lm(Value ~ is_male + is_female + is_old + is_facebook +
+                      + is_facebook * is_male + is_facebook * is_female 
+                      + is_facebook * is_old + as.factor(`Due Date`) + as.factor(Researcher), 
                    final_data_long %>% filter(Metric == "Average Bias"))
 coef <- coeftest(bias_model_long, vcov. = vcovHC(bias_model_long))
 coef
@@ -87,8 +94,10 @@ coef
 
 ```{r}
 # bias model with only complete observations
-bias_model_filt <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
-                   as.factor(Researcher), 
+bias_model_filt <- lm(Value ~ is_male + is_female + is_old + is_facebook 
+                      + is_facebook * is_male + is_facebook * is_female 
+                      + is_facebook * is_old + as.factor(`Due Date`)
+                      + as.factor(Researcher), 
                    final_data_long_filt %>% filter(Metric == "Average Bias"))
 coef <- coeftest(bias_model_filt, vcov. = vcovHC(bias_model_filt))
 coef
@@ -98,7 +107,9 @@ coef
 # Run Reliability Models
 ```{r}
 # reliability model with no covariates
-reliability_model_short <- lm(Value ~ is_male + is_female + is_old + is_facebook, 
+reliability_model_short <- lm(Value ~ is_male + is_female + is_old + is_facebook
+                              + is_facebook * is_male + is_facebook * is_female 
+                              + is_facebook * is_old,
                    final_data_long %>% filter(Metric == "Average Reliability"))
 coef <- coeftest(reliability_model_short, vcov. = vcovHC(reliability_model_short))
 coef
@@ -106,8 +117,10 @@ coef
 
 ```{r}
 # reliability model with covariates
-reliability_model_long <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
-                   as.factor(Researcher), 
+reliability_model_long <- lm(Value ~ is_male + is_female + is_old + is_facebook 
+                             + is_facebook * is_male + is_facebook * is_female 
+                             + is_facebook * is_old + as.factor(`Due Date`)
+                             + as.factor(Researcher), 
                    final_data_long %>% filter(Metric == "Average Reliability"))
 coef <- coeftest(reliability_model_long, vcov. = vcovHC(reliability_model_long))
 coef
@@ -116,8 +129,10 @@ coef
 
 ```{r}
 # reliability model with only complete observations
-reliability_model_filt <- lm(Value ~ is_male + is_female + is_old + is_facebook + as.factor(`Due Date`) +
-                   as.factor(Researcher), 
+reliability_model_filt <- lm(Value ~ is_male + is_female + is_old + is_facebook 
+                             + is_facebook * is_male + is_facebook * is_female 
+                             + is_facebook * is_old + as.factor(`Due Date`)
+                             + as.factor(Researcher), 
                    final_data_long_filt %>% filter(Metric == "Average Reliability"))
 coef <- coeftest(reliability_model_filt, vcov. = vcovHC(reliability_model_filt))
 coef
