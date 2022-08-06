@@ -270,10 +270,10 @@ regular_effect$Effect <- 'Regular'
 large_effect$Effect <- 'Large'
 data <- rbind(low_effect, regular_effect, large_effect)
 
-is_male <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_male_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Male") + theme(plot.title = element_text(hjust = 0.5))
-is_female <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_female_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Female") + theme(plot.title = element_text(hjust = 0.5))
-is_old <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_old_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Old") + theme(plot.title = element_text(hjust = 0.5))
-is_facebook <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_facebook_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Facebook") + theme(plot.title = element_text(hjust = 0.5))
+is_male <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_male_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Male") + theme(plot.title = element_text(hjust = 0.5)) + scale_color_manual(values=c("#8b2832", "#3c5d5b", "#d1a343"))
+is_female <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_female_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Female") + theme(plot.title = element_text(hjust = 0.5)) + scale_color_manual(values=c("#8b2832", "#3c5d5b", "#d1a343"))
+is_old <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_old_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Old") + theme(plot.title = element_text(hjust = 0.5)) + scale_color_manual(values=c("#8b2832", "#3c5d5b", "#d1a343"))
+is_facebook <- ggplot(data = data, aes(x=percentages_to_sample*estimated_sample_size, y=is_facebook_powers*100)) + geom_line(aes(colour=Effect)) + xlab("Sample Size") + ylab("Power") + labs(title = "Facebook") + theme(plot.title = element_text(hjust = 0.5)) + scale_color_manual(values=c("#8b2832", "#3c5d5b", "#d1a343"))
 plot_list <- list(is_male, is_female, is_old, is_facebook)
 grid.arrange(is_male, is_female, is_old, is_facebook, nrow=2,top=("Relationship between Sample Size and Power"))
 ```

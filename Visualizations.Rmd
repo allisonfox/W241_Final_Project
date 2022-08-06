@@ -18,20 +18,54 @@ library(tidyr)
 
 # Load Clean Data
 ```{r}
-final_data_clean <- readxl::read_xlsx("Final_Data_clean.xlsx")
-source_data <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=1)
-source_data_youtube <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=2)
+final_data_clean <- data.table(readxl::read_xlsx("Final_Data_clean.xlsx"))
+source_data <- data.table(readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=1))
+source_data_youtube <- data.table(readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=2))
 source_data_facebook <- readxl::read_xlsx("Source_Counts_Output.xlsx", sheet=3)
+source_data_youtube[Source=="CBS Evening News with Nora O'Donnell", Source:="CBS Evening News"]
+final_data_clean
 ```
 
 
 # Plot average bias and reliability of sources
 ```{r, warning = FALSE} 
-ggplot(final_data_clean, aes(fill = Website, y = Value, x = Metric)) + 
+d_reliability <- final_data_clean[Metric == 'Average Reliability']
+d_bias <- final_data_clean[Metric == 'Average Bias']
+
+ggplot(d_bias, aes(fill = Website, y = Value, x = Metric)) + 
   geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
-  labs(title = "Average Bias and Reliability of News Sources on Facebook and Youtube") +
-  scale_y_continuous(limits = c(-10,45), breaks = c(-10,0,10,20,30,40))
+  labs(title = "Average Bias of News Sources on Facebook and Youtube") +
+  xlab("")+
+  scale_y_continuous(limits = c(-10,10), breaks = c(-10,0,10,20,30,40)) + coord_flip()
+
+ggplot(d_reliability, aes(fill = Website, y = Value, x = Metric)) + 
+  geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
+  labs(title = "Average Reliability of News Sources on Facebook and Youtube") +
+  xlab("")+
+  scale_y_continuous(limits = c(0,50), breaks = c(-10,0,10,20,30,40)) + coord_flip()
 ```
+```{r, warning = FALSE} 
+d_reliability <- final_data_clean[Metric == 'Average Reliability']
+d_bias <- final_data_clean[Metric == 'Average Bias']
+
+ggplot(d_bias, aes(x = Value, color = Website, fill = Website)) + 
+  geom_density(alpha=0.8) + 
+  labs(title = "Density of Average Bias of News Sources on Facebook and Youtube") +
+  ylab("Density") +
+  xlab("Average Bias") +
+  scale_color_manual(values=c("#4c948c", "#bc7c3c")) +
+  scale_fill_manual(values=c("#4c948c", "#bc7c3c"))
+```
+```{r}
+ggplot(d_reliability, aes(x = Value, color = Website, fill = Website)) + 
+  geom_density(alpha=0.8) + 
+  labs(title = "Density of Average Reliability of News Sources on Facebook and Youtube") +
+  ylab("Density") +
+  xlab("Average Reliability") +
+  scale_color_manual(values=c("#4c948c", "#bc7c3c")) +
+  scale_fill_manual(values=c("#4c948c", "#bc7c3c"))
+```
+
 
 ```{r, warning = FALSE} 
 #Subset data to bias metrics
@@ -42,7 +76,48 @@ ggplot(bias_data, aes(fill = Website, y = Value, x = Gender)) +
   geom_bar(position = 'dodge', stat = 'summary', fun = 'mean') + 
   labs(title = "Average News Source Bias on Facebook and Youtube by Gender") +
   scale_y_continuous(limits = c(-5,5), breaks = c(-5,0,5))
+
 ```
+
+```{r}
+ggplot(d_bias, aes(x = Value, color = Gender, fill = Gender)) + 
+  geom_density(alpha=0.6) + 
+  labs(title = "Density of Average Bias of News Sources by Gender") +
+  ylab("Density") +
+  xlab("Average Bias") +
+  scale_color_manual(values=c("#3c5c5c", "#d1a343", '#8b2832')) +
+  scale_fill_manual(values=c("#3c5c5c", "#d1a343", '#8b2832'))
+```
+```{r}
+ggplot(d_reliability, aes(x = Value, color = Gender, fill = Gender)) + 
+  geom_density(alpha=0.6) + 
+  labs(title = "Density of Average Reliability of News Sources by Gender") +
+  ylab("Density") +
+  xlab("Average Reliability") +
+  scale_color_manual(values=c("#3c5c5c", "#d1a343", '#8b2832')) +
+  scale_fill_manual(values=c("#3c5c5c", "#d1a343", '#8b2832'))
+```
+
+```{r}
+ggplot(d_bias, aes(x = Value, color = `Age Group`, fill = `Age Group`)) + 
+  geom_density(alpha=0.7) + 
+  labs(title = "Density of Average Bias of News Sources by Age") +
+  ylab("Density") +
+  xlab("Average Bias") +
+  scale_color_manual(values=c("#8b2832", "#3c5d5b")) +
+  scale_fill_manual(values=c("#8b2832", "#3c5d5b"))
+```
+
+```{r}
+ggplot(d_reliability, aes(x = Value, color = `Age Group`, fill = `Age Group`)) + 
+  geom_density(alpha=0.7) + 
+  labs(title = "Density of Average Reliability of News Sources by Age") +
+  ylab("Density") +
+  xlab("Average Reliability") +
+  scale_color_manual(values=c("#8b2832", "#3c5d5b")) +
+  scale_fill_manual(values=c("#8b2832", "#3c5d5b"))
+```
+
 ```{r, warning = FALSE} 
 #Plot average bias by age
 ggplot(bias_data, aes(fill = Website, y = Value, x = `Age Group`)) + 
@@ -103,11 +178,11 @@ sources_top <- source_data %>% slice(1:10)
 
 plot1 <- ggplot(sources_top, aes(fill = `bias label`,y = Count, x = reorder(Source, Count))) + 
   geom_bar(position = 'dodge', stat = 'summary', fun = 'sum') + 
-  labs(title = "Top News Sources") +
+  labs(title = "Top News Sources", fill="Bias Label") +
   scale_y_continuous(limits = c(0,175), breaks = c(0,50,100,150)) + coord_flip()
 
 plot1 + scale_fill_manual(breaks = c("Skews Right", "Skews Left", "Middle"), 
-                       values=c("red", "blue", "green")) + xlab("Sources")
+                       values=c("#8b2832", "#3c5d5b", "#d1a343"))+ xlab("Sources")
 ```
 ```{r}
 #Facebook top sources
@@ -115,10 +190,10 @@ sources_top_fb <- source_data_facebook %>% slice(1:10)
 
 plot2 <- ggplot(sources_top_fb, aes(fill = `bias label`,y = Count, x = reorder(Source, Count))) + 
   geom_bar(position = 'dodge', stat = 'summary', fun = 'sum') + 
-  labs(title = "Top Facebook News Sources") +
+  labs(title = "Top Facebook News Sources", fill="Bias Label") +
   scale_y_continuous(limits = c(0,100), breaks = c(0,50,100)) + coord_flip()
 plot2 + scale_fill_manual(breaks = c("Skews Right", "Skews Left", "Middle"), 
-                       values=c("red", "blue", "green"))+ xlab("Sources")
+                       values=c("#8b2832", "#3c5d5b", "#d1a343"))+ xlab("Sources")
 ```
   
 ```{r}
@@ -127,9 +202,9 @@ sources_top_yt <- source_data_youtube %>% slice(1:10)
 
 plot3 <- ggplot(sources_top_yt, aes(fill = `bias label`,y = Count, x = reorder(Source, Count))) + 
   geom_bar(position = 'dodge', stat = 'summary', fun = 'sum') + 
-  labs(title = "Top Youtube News Sources") + 
+  labs(title = "Top Youtube News Sources", fill="Bias Label") + 
   scale_y_continuous(limits = c(0,150), breaks = c(0,50,100,150)) + coord_flip()
 plot3 + scale_fill_manual(breaks = c("Skews Right", "Skews Left", "Middle"), 
-                       values=c("red", "blue", "green")) + xlab("Sources")
+                       values=c("#8b2832", "#3c5d5b", "#d1a343"))+ xlab("Sources")
 ```
 

@@ -38,6 +38,34 @@ website_diff_attrition_coeftest <- coeftest(website_diff_attrition_model,
 stargazer(website_diff_attrition_model, header=F)
 ```
 
+\begin{table}[!htbp] \centering 
+  \caption{Differential Attrition between YouTube and Facebook} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & Account Disabled \\ 
+\hline \\[-1.8ex] 
+  Website: YouTube & $-$0.413$^{***}$ \\ 
+  & (0.031) \\ 
+  & \\ 
+ Constant & 0.413$^{***}$ \\ 
+  & (0.022) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 504 \\ 
+R$^{2}$ & 0.260 \\ 
+Adjusted R$^{2}$ & 0.259 \\ 
+Residual Std. Error & 0.349 (df = 502) \\ 
+F Statistic & 176.378$^{***}$ (df = 1; 502) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
 ```{r}
 # Does demographic information influence Facebook's decision to ban an account?
 facebook_diff_attrition_model <- d[Website=="Facebook", lm(account_disabled ~ as.factor(Gender) + as.factor(`Age Group`))]
@@ -50,5 +78,40 @@ facebook_diff_attrition_coeftest <- coeftest(facebook_diff_attrition_model,
 # Stargazer output.
 stargazer(facebook_diff_attrition_model, header=F)
 ```
+
+\begin{table}[!htbp] \centering 
+  \caption{Differential Attrition on Facebook between Demographics} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & Account Disabled \\ 
+\hline \\[-1.8ex] 
+ Gender: Male & $-$0.048 \\ 
+  & (0.076) \\ 
+  & \\ 
+ Gender: Prefer Not To Answer & 0.071 \\ 
+  & (0.076) \\ 
+  & \\ 
+ Age Group: Young & 0.063 \\ 
+  & (0.062) \\ 
+  & \\ 
+ Constant & 0.373$^{***}$ \\ 
+  & (0.062) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 252 \\ 
+R$^{2}$ & 0.014 \\ 
+Adjusted R$^{2}$ & 0.002 \\ 
+Residual Std. Error & 0.493 (df = 248) \\ 
+F Statistic & 1.177 (df = 3; 248) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
 
 Summary: Attrition is significantly different between YouTube and Facebook, however, Facebook attrition is not significantly different due to any of the collected demographic variables.

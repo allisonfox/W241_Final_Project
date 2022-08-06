@@ -1,0 +1,554 @@
+---
+title: "Demographic News Bias On Social Media"
+author: "Allison Fox, Carlie McCleary, and Hannah George"
+date: "August 6, 2022"
+documentclass: article
+classoption: 10pt
+geometry: margin=1in
+bibliography: references.bib
+nocite: '@*'
+csl: acm-sig-proceedings-long-author-list.csl
+link-citations: true
+output: 
+  pdf_document:
+    toc: true
+header-includes:
+  - \usepackage{multicol}
+  - \usepackage{caption}
+  - \usepackage{subcaption}
+---
+
+
+\newpage
+
+# Abstract
+The American political landscape has become increasingly polarized in recent years and that is due in large part to biased news outlets. Fifty-three percent of Americans consume news through social media [@shearer_2021], these sites compile stories from a variety of sources to present to their user. And it’s possible that the political bias of the news sources used by these social media platforms vary depending on demographic information. In this project, we explore whether the demographic information provided upon creating an account informs the type of news that the two websites - YouTube and Facebook - show users. In order to answer this question we created 126 new Google accounts and varied them only by gender and date of birth. Next, we opened up YouTube News and measured the average political bias of the channels that appeared in the first twelve videos. Then, using the Google account’s Gmail address, we created a Facebook account and measured the average political bias from the authors of the first twelve stories that appeared under their news section. Through this experiment we found there is no evidence to suggest that either website uses demographic information when relating to the bias of the news sources. However, there was some significance to show that YouTube is showing men less reliable news than accounts identified as women or unspecified. Our data also shows that Facebook is more left-biased and unreliable when compared to YouTube. This experiment brings up larger questions on whether the use of demographic information should inform the recommendation algorithms used to display news to its users, and whether social media platforms are responsible for the content of the news sources they prioritize to users.
+
+# Introduction
+
+Research has shown that people’s news source preferences vary based on gender and age [@grieco_2020]. Additionally, both Facebook [@facebook] and Google [@google] allow advertisers to target their ads at specific demographic categories. Given user preferences and demographic targeting of ads, we theorize that Facebook and Google may also incorporate this demographic targeting within the recommender systems algorithms they use to select the top news posts that display for each user. Algorithmic bias, the differential treatment of certain individuals or groups based on their identities, has been well documented in technologies that use algorithms to make decisions [@lambrecht_tucker_2019], [@danks_london_2017], [@sweeney_2013]. Since this bias has been demonstrated in terms of which types of users see certain ads, we suspect that the top news sources displayed will have different levels of bias based on the gender and age indicated in the user’s profile.
+
+Therefore, we are interested in investigating whether there is a relationship between the types of news sources displayed on YouTube and Facebook and the demographic characteristics of the user. A similar study conducted by Lambrecht et. al. displayed an ad on Facebook about STEM careers, and specified that it be shown to both men and women to explore if there was a bias for certain users over others based on gender. The researchers found that men were more likely to see the ad than women [@lambrecht_tucker_2019]. While this study looks at the relationship between demographic characteristics and ads displayed and we were interested in the relationship between demographic characteristics and news sources displayed, we drew lessons learned from this study and similar experiments.
+
+We understand that the featured news articles on Facebook and YouTube are a result of recommender systems built by the companies. Naturally, the most explicit way to capture the mechanisms that could cause user account demographic information to change the political leaning of featured news would be to understand the underlying predictive models. They likely have features that input the age and gender of account profiles and in turn affect the outcome of news displayed, and this effect is exactly what we tried to understand. We designed the experiment to precisely test the effect by removing as much noise as possible and holding everything constant aside from the treatment. User accounts were created solely for the purposes of this study and only the treatment was altered across all profiles.
+
+Through this research, we aimed to answer the following question: Does the political bias of the news sources used by YouTube and Facebook vary depending on demographic information? Based on the aforementioned research, we hypothesized that accounts made for older individuals would be more likely to be shown news from more right-leaning sources while the opposite would be true for younger individuals, and that Facebook would show news from more polarizing sources than YouTube.
+
+
+# Experiment Design
+
+## Experiment Overview
+
+For this experiment, we conducted a within-subjects design where each newly-created account was used on both Facebook and YouTube. We did not measure anything before we administered treatment due to the fact that these were newly created accounts.
+
+Prior to the actual collection of data, we followed several preventative measures to ensure that the results of each subject were independent from each other. These steps included: 1) using a VPN and 2) clearing our browser cache, cookies, and internet history. Prior to the creation of each account, we randomly set our VPN to a location within the United States. This step serves several purposes, the first is to make sure that the location in which we collected the data did not influence the results and the second purpose was to prevent any of our researcher’s IP addresses from being flagged by either Google or Meta, which would have prevented us from collecting further data. 
+
+We followed a clear set of steps to ensure that all researchers collected information in the same way. Below are the steps that were followed: 
+
+
+### Step 1: Creating the Google Account
+
+The first step in the experiment design was to create a Google account. This account was used to gather information from YouTube and was also instrumental in creating a Facebook account. In order to keep the data as consistent as possible, we set the names of every account to “Alex Doe” - we choose this name because of its simplicity and gender neutrality. The email used followed this format:
+
+\begin{center}
+\texttt{[Researcher Initials].alex.doe.[Subject Number]@gmail.com}
+\end{center}
+
+We varied each account only by the two selected demographics: age and gender. For some accounts, a phone number was required. In order to avoid the possibility of our accounts being linked to each other, we used a variety of phone numbers, sourced from temporary sim cards or from friends and family.
+
+
+### Step 2: Collect Bias from YouTube
+
+The next step was to open up YouTube and sign in using the newly created Google account. Then we navigated to Explore > News and measured the media bias of the sources of the first twelve videos under the Top Stories section.
+
+
+### Step 3: Create Facebook Account
+
+Then, we created a Facebook account using the email address from the corresponding Google account. The demographic information provided to Facebook was the same as the demographic information provided to Google.
+
+
+### Step 4: Collect Bias from Facebook
+
+After creating the Facebook account, we navigated to the News section and collected the bias of the sources of the first twelve articles, using the same method as outlined above in the previous step.
+
+
+## Measurement Units
+
+The subjects in the experiment were the Google and Facebook accounts created by the three researchers. Each researcher was tasked with producing a specified number of accounts per week and the outcome data for each account (subject) was collected immediately after account creation. 
+
+
+## Treatment 
+
+In this experiment, the treatment was administered by adjusting profile demographic information. When creating the user accounts we changed the profile ages and genders in order to measure the subsequent effects on the outcome variable of interest: presence of political bias and polarity on YouTube and Facebook news. Accounts were randomized to one of two age groups and one of three gender groups. When randomizing, we ensured that there was an equal proportion of each age group and each gender group. More specifically, there were two separate age groups: 20’s and 60’s, with the birthdays being randomly generated within that age range. For gender, we equally split between the options of Male, Female, and Prefer not to Answer. Compliance to the treatment was not an issue in this experiment, since we created the accounts and ensured that all information entered in the profile matched what was indicated in our spreadsheet of accounts to be created.
+
+
+## Randomization
+
+Before beginning data collection, we developed a spreadsheet of all the accounts we intended to create. Therefore, assignment to the treatment was not entirely random, we pre-specified which accounts would be created each week by each researcher so that the data collected across researchers and news cycles was as consistent as possible. This approach minimized variability and ensured that all demographic categories were equally represented in the full study population, which we deemed to be more important than following a true randomization scheme (i.e., flipping a coin to determine which treatment group each account should be randomized to). Given that we pre-specified the demographic characteristics of all accounts that were to be created, and all researchers followed this spreadsheet when creating accounts, we had no doubts that we would collect an equal amount of data across demographics.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.9\linewidth]{Figures/flow_diagram.png}
+  \caption{Flow Diagram of Study Population}
+  \label{fig:flow_diagram}
+\end{figure}
+
+As Figure \ref{fig:flow_diagram} shows, the full study population consisted of 252 accounts, with half being Facebook accounts and half being YouTube accounts. For each media platform, we created 63 accounts between the ages 20-29 and 63 accounts between the ages 60-69. These accounts were assigned to one of the three following genders: Female, Male, or Prefer Not to Answer. The accounts were created in pairs, so there were 252 accounts created, which was the equivalent of accounts created for 126 individuals.
+
+
+## Outcome Measures
+
+There were two outcome measures acquired from each user account on both platforms: average bias and average reliability of the first twelve news sources. Political bias is a numerical score which represents the political leaning of the news source, where negative values are left-leaning and positive values and right-leaning. Reliability is a score that represents the news source’s tendency for truthful and accurate reporting on a scale between 0 and 50. The scores associated with each news source were obtained from Ad Fontes Media, a public benefit corporation that uses a politically diverse team of analysts to score news sources on the bias and reliability of the content [@otero_2021]. We concede that metrics like bias and reliability are hard to objectively quantify and that scores like these can be biased themselves. However, in order to formally answer the premise of this study then a numerical measure of bias and reliability is needed. And Ad Fontes Media appear to mitigate their own biases where possible through the process of having multiple analysts determine the scores for each news media outlet.
+
+In order to test our causal claim, we established a post-test control group design with between subjects comparisons. The classification between control and treatment were arbitrarily chosen and do not affect the results of the experiment. For the rest of the paper, we will define the treatment group as the accounts within the older age demographic and either male or female gender, while the control group had a younger age demographic and did not specify a gender. Since randomization of both groups occurred, then the treatment (or lack thereof) was administered, and finally the outcome measurements were taken, the ROXO design should be classified as RXO for those treated and R-O for those in control. We could also consider this a blocked randomization design on researcher and week because we each created the same number of accounts each week.
+
+
+## Power Calculation
+
+Before determining how many accounts to include in the study population, the team conducted a power analysis of the experiment by simulating the data generating process in three separate outcome scenarios. The purpose of the analysis was to ensure an adequate amount of samples are collected to generate enough power to correctly reject the null hypothesis of no effect when the alternative hypothesis is true. The three scenarios that were explored were related to the expected treatment effect of the age, gender, and website covariates. In each subsequent simulation the magnitude of the treatment effects increased, while the standard deviations remained constant.
+
+Assumed treatment effects used in the simulations were influenced by the findings of a Pew Research article [@grieco_2020]. The article suggests there are demographic differences apparent among those who rely on left or right leaning news sources. More specifically, Fox News is one of the most well known Republican leaning sources and its viewership is predominantly male and older individuals. The rest of the news sources outlined in the article were Democratic leaning and almost all had majority female viewers. This evidence aided in setting the baseline treatment effect directions and magnitudes.
+
+The first step of the power analysis was to simulate the data generating process. We created a function to produce expected experimental data given an estimate of the covariate treatment effects (tau) and a baseline sample size of 126. Next, we created a function that used the newly generated experimental data to produce multiple outcomes for power, varying by sample size. This was accomplished by collecting 1,000 p-values for each percentage of sample size taken from the experimental data. The percentages ranged from 10% to 200% of the original sample size of 126 individuals (252 accounts in total). The actual power calculation was performed at each sample size value by creating 1,000 linear regression models with the covariates and saving the associated p-values for each one. Power for each covariate was determined by finding the fraction of models that resulted in p-values at or below our statistical significance level of 0.05. We aimed to examine how our experiment's power would change if it resulted in different treatment effect means. The tau distributions were created using the adjusted mean value, a constant standard deviation of 3, and the estimated sample size. For the Regular treatment effect, we used the following effect sizes for average bias: 5 for male, -3 for female, 4 for old, and -3 for Facebook. For reference, in the Ad Fontes dataset we used for identifying bias and reliability, ABC News has an average bias of -4.5 and Fox News has an average bias of 14.2, with negative being left-leaning and positive being right-leaning. For the low treatment effect, the effect sizes were 2 units less extreme for each category, and for the high treatment effect, the effect sizes were 2 units more extreme for each category.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/power_analysis_male.png}
+    \label{fig:power_analysis_male}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/power_analysis_female.png}
+    \label{fig:power_analysis_female}
+  \end{subfigure}
+  
+  
+  \bigskip
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/power_analysis_old.png}
+    \label{fig:power_analysis_age}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/power_analysis_facebook.png}
+    \label{fig:power_analysis_facebook}
+  \end{subfigure}
+  \caption{Relationships between Sample Size and Power for Demographic Groups and Media Platform}
+  \label{fig:power_analysis}
+\end{figure}
+
+The relationship between sample size and power for each covariate is highlighted in the graphs above. For most of the covariates, it is evident that a Low treatment effect would not allow us to hit our power goal of 80%. If the treatment effects are more aligned with the Regular and Large effects that we simulated, we would be able to generate a power higher than 80% with a sample of 126 individuals (252 accounts).
+
+
+# Results
+
+## Data
+
+We recorded all data in a shared spreadsheet. We collected the top twelve news sources on both Facebook and YouTube, and then built formulas that would automatically pull the Ad Fontes bias and reliability score for each news source. This spreadsheet also included columns on sample ID, researcher name, due date, and VPN location. Since we included due date and researcher name as covariates in the model, having all this information in one location allowed for efficient data cleaning.
+
+Once we reached the end of the account generation schedule and all necessary data was collected, some simple reformatting and data cleansing was done to prepare for analysis. Next, we visually inspected the data using histograms to begin inferring what treatment effects we might find and to ensure the data appeared to be legitimate. The graphs in Figure \ref{fig:density_graphs_website} simply compares the distribution of average news bias and reliability between Facebook and YouTube. The average bias was calculated by taking the average of the twelve media bias scores collected, and the same approach was used for average reliability.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/density_bias.png}
+    \label{fig:density_bias}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/density_reliability.png}
+    \label{fig:density_reliability}
+  \end{subfigure}
+  \caption{Density Graphs by Outcome Metric and Website}
+  \label{fig:density_graphs_website}
+\end{figure}
+
+\newpage
+
+Through these density curves, we can see that YouTube's bias and reliability tends to be more spread out than Facebook - indicating that they are pulling news from a wider variety of sources. Facebook's bias appears to be significantly more negative than YouTube. Both of the websites tend to show news from left-biased sources, but Facebook appears to be more strongly biased than YouTube. As for reliability, both websites look to peak between a score of 44-45, however, it does appear like YouTube is slightly more reliable on average.
+
+In Figure \ref{fig:top_sources_website} below we are able to better understand the breakdown of top news sources between each platform and their political affiliation.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/top_facebook_sources.png}
+    \label{fig:top_facebook_sources}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/top_youtube_sources.png}
+    \label{fig:top_youtube_sources}
+  \end{subfigure}
+  \caption{Top News Sources Used by Each Website}
+  \label{fig:top_sources_website}
+\end{figure}
+
+In the above, blue represents left-leaning sources, yellow is neutral, and red represents right-leaning sources. The top Facebook news sources are only either left leaning or in the middle, whereas YouTube's top outlets include one right-leaning source but otherwise appears to be fairly similar. The difference in scale between the two x-axes is likely explained through the Facebook account attrition that will be discussed later.
+
+Finally, we produced a visualization that serves to highlight the different treatment effects for bias between age and gender in Figure \ref{fig:density_graphs_demographic}.
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/density_bias_gender.png}
+    \label{fig:density_bias_gender}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/density_reliability_gender.png}
+    \label{fig:density_reliability_gender}
+  \end{subfigure}
+  
+  
+  \bigskip
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/density_bias_age.png}
+    \label{fig:density_bias_age}
+  \end{subfigure}%
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.9\linewidth]{Figures/density_reliability_age.png}
+    \label{fig:density_reliability_age}
+  \end{subfigure}
+  \caption{Density Graphs by Demographic and Outcome Metric}
+  \label{fig:density_graphs_demographic}
+\end{figure}
+
+\newpage
+
+Based on these density curves, the most likely demographic to produce significant effects is gender. There is a slight difference in the peaks between each curve with the reliability curves being more apparent than bias. The curves for age do vary slightly, however, they look to have about the same average bias and reliability, possibly indicating no significant effect. 
+
+
+## Attrition
+
+One issue we experienced throughout the experiment was getting our generated accounts banned from Facebook immediately upon creation, leading to an attrition of sorts. We used linear regression  to test whether the differential attrition of YouTube and Facebook accounts was statistically significant.
+
+\begin{table}[!htbp] \centering 
+  \caption{Differential Attrition between YouTube and Facebook} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & Account Disabled \\ 
+\hline \\[-1.8ex] 
+  Website: YouTube & $-$0.413$^{***}$ \\ 
+  & (0.031) \\ 
+  & \\ 
+ Constant & 0.413$^{***}$ \\ 
+  & (0.022) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 504 \\ 
+R$^{2}$ & 0.260 \\ 
+Adjusted R$^{2}$ & 0.259 \\ 
+Residual Std. Error & 0.349 (df = 502) \\ 
+F Statistic & 176.378$^{***}$ (df = 1; 502) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\label{table:attrition_website}
+\end{table} 
+
+\newpage
+
+Unsurprisingly, the test in Table \ref{table:attrition_website} shows that Facebook does have statistically significant differential attrition when compared to YouTube.
+
+Our primary concern was that this attrition would invalidate the rest of our data if a particular demographic was experiencing the attrition more than the rest. So the second form of differential attrition we wanted to test for was between demographics on Facebook. Essentially, we wanted to determine whether the demographic information had any influence on whether the account was banned or not. The results of the test can be viewed in Table \ref{table:attrition_demographics}.
+
+\begin{table}[!htbp] \centering 
+  \caption{Differential Attrition on Facebook between Demographics} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & Account Disabled \\ 
+\hline \\[-1.8ex] 
+ Gender: Male & $-$0.048 \\ 
+  & (0.076) \\ 
+  & \\ 
+ Gender: Prefer Not To Answer & 0.071 \\ 
+  & (0.076) \\ 
+  & \\ 
+ Age Group: Young & 0.063 \\ 
+  & (0.062) \\ 
+  & \\ 
+ Constant & 0.373$^{***}$ \\ 
+  & (0.062) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observations & 252 \\ 
+R$^{2}$ & 0.014 \\ 
+Adjusted R$^{2}$ & 0.002 \\ 
+Residual Std. Error & 0.493 (df = 248) \\ 
+F Statistic & 1.177 (df = 3; 248) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\label{table:attrition_demographics}
+\end{table} 
+
+We found no significant differential attrition between demographics for Facebook, leaving us to conclude that removing those data points will not bias our data against any particular demographic. However, given the significant difference in attrition between YouTube and Facebook, we will run two models: one on all of the data collected, and one model on only the individuals with no attrition on either account.
+
+
+## Models
+
+In order to estimate the treatment effect of the different demographic groups and social media platforms on average bias and reliability of the news sources, we built several linear regression models. We began by running both the average bias and average reliability models without any covariates, in order to understand the effect that our covariates had on the precision of the model once we did add in the covariates. We then added in our covariates, which were researcher name and due date. We deemed these to be important covariates, since there could have been variability introduced by the researcher collecting the data as well as by the news cycles which varied based on the most recent events that happened in the world. Lastly, we developed a third regression model for average bias and for average reliability, where we filtered the data set to only include individuals for which we had complete data. That is, if a Facebook account was banned for a given individual and we were therefore unable to calculate average bias and reliability, then we dropped the average bias and reliability observations for YouTube for that individual from this filtered dataset.
+
+We intended to have a full sample size of 252, but due to blocked Facebook accounts, we ended with a sample size of 200. In the final models for bias and reliability, where we used this filtered data set and only kept complete pairwise observations, we had a sample size of 148.
+
+In addition to the demographic information that we varied between accounts, we also included interaction terms between the website binary variable and each of the demographic variables. This was done in order to measure the independent effects that both websites had on each outcome metric for each of the selected demographic. That way we could better isolate the effects of each website. Table \ref{table:model_bias} shows the regression results for the average bias models. 
+
+\begin{table}[!htbp] \centering 
+  \caption{Average Bias Regression Models} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{3}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-4} 
+\\[-1.8ex] & \multicolumn{3}{c}{Value} \\ 
+\\[-1.8ex] & Without Covariates & Covariates, Not Filtered & Covariates, Filtered\\ 
+\hline \\[-1.8ex] 
+ Gender: Male & 0.583 & 0.583 & 0.246 \\ 
+  & (0.372) & (0.360) & (0.474) \\ 
+  & & & \\ 
+ Gender: Female & 0.275 & 0.275 & $-$0.116 \\ 
+  & (0.372) & (0.360) & (0.478) \\ 
+  & & & \\ 
+ Age Group: Old & $-$0.111 & $-$0.111 & $-$0.051 \\ 
+  & (0.304) & (0.294) & (0.385) \\ 
+  & & & \\ 
+ Website: Facebook & $-$1.366$^{***}$ & $-$1.252$^{**}$ & $-$1.395$^{**}$ \\ 
+  & (0.502) & (0.487) & (0.535) \\ 
+  & & & \\ 
+ Interaction: Male \& Facebook & $-$0.674 & $-$0.683 & $-$0.397 \\ 
+  & (0.620) & (0.601) & (0.664) \\ 
+  & & & \\ 
+ Interaction: Female \& Facebook & $-$0.375 & $-$0.332 & 0.018 \\ 
+  & (0.625) & (0.605) & (0.673) \\ 
+  & & & \\ 
+ Interaction: Old \& Facebook & $-$0.145 & $-$0.191 & $-$0.218 \\ 
+  & (0.504) & (0.489) & (0.539) \\ 
+  & & & \\ 
+ Constant & $-$3.225$^{***}$ & $-$4.099$^{***}$ & $-$3.982$^{***}$ \\ 
+  & (0.304) & (0.441) & (0.527) \\ 
+  & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 200 & 200 & 148 \\ 
+R$^{2}$ & 0.223 & 0.305 & 0.312 \\ 
+Adjusted R$^{2}$ & 0.194 & 0.248 & 0.234 \\ 
+Residual Std. Error & 1.706 (df = 192) & 1.648 (df = 184) & 1.615 (df = 132) \\ 
+F Statistic & 7.853$^{***}$ (df = 7; 192) & 5.378$^{***}$ (df = 15; 184) & 3.999$^{***}$ (df = 15; 132) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{3}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular}
+\label{table:model_bias}
+\end{table} 
+
+\newpage
+
+There is no statistically significant difference in average bias based on gender or age in any of the three models. However, there is a small significant difference in bias between the two websites, with Facebook being slightly more left-biased than YouTube. Our theory surrounding this finding is that Facebook news tended to display more lifestyle and celebrity gossip publications, whereas YouTube was strictly national and local news sources. These lifestyle publications tended to be left-leaning, whereas there was a larger spread of bias for YouTube's sources.
+
+The covariates in this model did not appear to alter the coefficients of the demographic variables by a large amount, however, they do present interesting observations on their own. Below, we made a table of only the included covariates and their coefficients in the linear model.
+
+\begin{table}[!htbp] \centering 
+  \caption{Bias Covariate Importance} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{Value} \\ 
+\\[-1.8ex] & Not Filtered & Filtered\\ 
+\hline \\[-1.8ex] 
+ 2022-06-19 & 0.198 & 0.008 \\ 
+  & (0.420) & (0.451) \\ 
+  & & \\ 
+ 2022-06-26 & 1.136$^{***}$ & 0.761 \\ 
+  & (0.435) & (0.503) \\ 
+  & & \\ 
+ 2022-07-03 & 0.610 & 0.727 \\ 
+  & (0.419) & (0.449) \\ 
+  & & \\ 
+ 2022-07-10 & 1.040$^{**}$ & 1.016$^{*}$ \\ 
+  & (0.442) & (0.537) \\ 
+  & & \\ 
+ 2022-07-17 & 1.485$^{***}$ & 1.487$^{***}$ \\ 
+  & (0.423) & (0.463) \\ 
+  & & \\ 
+ 2022-07-24 & 1.359$^{***}$ & 1.761$^{***}$ \\ 
+  & (0.452) & (0.587) \\ 
+  & & \\ 
+ Researcher 1 & 0.149 & 0.107 \\ 
+  & (0.291) & (0.363) \\ 
+  & & \\ 
+ Researcher 2 & $-$0.023 & 0.224 \\ 
+  & (0.283) & (0.341) \\ 
+  & & \\ 
+ Constant & $-$4.099$^{***}$ & $-$3.982$^{***}$ \\ 
+  & (0.441) & (0.527) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 200 & 148 \\ 
+R$^{2}$ & 0.305 & 0.312 \\ 
+Adjusted R$^{2}$ & 0.248 & 0.234 \\ 
+Residual Std. Error & 1.648 (df = 184) & 1.615 (df = 132) \\ 
+F Statistic & 5.378$^{***}$ (df = 15; 184) & 3.999$^{***}$ (df = 15; 132) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular}
+\label{table:model_bias_covariate}
+\end{table}
+
+In this table, you can see the seasonal fluctuation in the bias of news over time where some weeks had a more significant effect than others. This increases our confidence in the inclusion of these covariates, without them then we could have incorrectly attributed this fluctuation to one of our demographic variables.
+
+Table \ref{table:model_reliability} below shows the regression results for the reliability models. 
+
+\begin{table}[!htbp] \centering 
+  \caption{Average Reliability Regression Models} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{3}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-4} 
+\\[-1.8ex] & \multicolumn{3}{c}{Value} \\ 
+\\[-1.8ex] & Without Covariates & Covariates, Not Filtered & Covariates, Filtered\\ 
+\hline \\[-1.8ex] 
+ Gender: Male & $-$0.644$^{***}$ & $-$0.644$^{***}$ & $-$0.686$^{**}$ \\ 
+  & (0.232) & (0.226) & (0.287) \\ 
+  & & & \\ 
+ Gender: Female & $-$0.512$^{**}$ & $-$0.512$^{**}$ & $-$0.465 \\ 
+  & (0.232) & (0.226) & (0.290) \\ 
+  & & & \\ 
+ Age Group: Old& 0.026 & 0.026 & 0.493$^{**}$ \\ 
+  & (0.189) & (0.184) & (0.233) \\ 
+  & & & \\ 
+ Website: Facebook& $-$0.986$^{***}$ & $-$1.035$^{***}$ & $-$0.771$^{**}$ \\ 
+  & (0.313) & (0.306) & (0.324) \\ 
+  & & & \\ 
+ Interaction: Male \& Facebook & 0.737$^{*}$ & 0.779$^{**}$ & 0.800$^{**}$ \\ 
+  & (0.386) & (0.378) & (0.402) \\ 
+  & & & \\ 
+ Interaction: Female \& Facebook & 0.669$^{*}$ & 0.686$^{*}$ & 0.630 \\ 
+  & (0.390) & (0.380) & (0.408) \\ 
+  & & & \\ 
+ Interaction: Old \& Facebook & 0.278 & 0.271 & $-$0.177 \\ 
+  & (0.314) & (0.307) & (0.326) \\ 
+  & & & \\ 
+ Constant & 44.672$^{***}$ & 44.548$^{***}$ & 44.280$^{***}$ \\ 
+  & (0.189) & (0.277) & (0.320) \\ 
+  & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 200 & 200 & 148 \\ 
+R$^{2}$ & 0.077 & 0.163 & 0.190 \\ 
+Adjusted R$^{2}$ & 0.044 & 0.095 & 0.098 \\ 
+Residual Std. Error & 1.063 (df = 192) & 1.035 (df = 184) & 0.979 (df = 132) \\ 
+F Statistic & 2.294$^{**}$ (df = 7; 192) & 2.387$^{***}$ (df = 15; 184) & 2.069$^{**}$ (df = 15; 132) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{3}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular}
+\label{table:model_reliability}
+\end{table}
+
+Prior to this analysis, we would like to note that any results with a p-value greater than 0.01 (\*\*\*) should not be considered significant due to the number of tests we are conducting. With that being considered, there are a few significant results to discuss. For the first two models the coefficients for the male and Facebook variables are statistically significant. Indicating that YouTube shows men less reliable news, and across all groups Facebook generally has less reliable news than YouTube. However, the significance of these effects are diminished when we look at the filtered model. The reason why might be due to the smaller sample size, we have less power in the filtered model and are less likely to reject the null hypothesis when the alternative hypothesis is true. Because of the significance observed in the other models, and because the results are still significant at the p < 0.05 (\*\*) level, we are inclined to believe this is the case. However, we will mark these results as hesitantly significant.
+
+In Table \ref{table:model_reliability_covariates} below we will take a look at the covariates for the reliability models.
+
+\begin{table}[!htbp] \centering 
+  \caption{Reliability Covariate Importance} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & \multicolumn{2}{c}{Value} \\ 
+\\[-1.8ex] & Not Filtered & Filtered\\ 
+\hline \\[-1.8ex] 
+ 2022-06-19 & 0.213 & 0.178 \\ 
+  & (0.263) & (0.274) \\ 
+  & & \\ 
+ 2022-06-26 & 0.349 & 0.099 \\ 
+  & (0.273) & (0.305) \\ 
+  & & \\ 
+ 2022-07-03 & 0.188 & 0.074 \\ 
+  & (0.263) & (0.272) \\ 
+  & & \\ 
+ 2022-07-10 & 0.596$^{**}$ & 0.516 \\ 
+  & (0.277) & (0.325) \\ 
+  & & \\ 
+ 2022-07-17 & 0.453$^{*}$ & 0.475$^{*}$ \\ 
+  & (0.266) & (0.281) \\ 
+  & & \\ 
+ 2022-07-24 & 0.134 & 0.340 \\ 
+  & (0.284) & (0.356) \\ 
+  & & \\ 
+ Researcher 1 & $-$0.520$^{***}$ & $-$0.460$^{**}$ \\ 
+  & (0.183) & (0.220) \\ 
+  & & \\ 
+ Researcher 2 & 0.064 & 0.173 \\ 
+  & (0.178) & (0.206) \\ 
+  & & \\ 
+ Constant & 44.548$^{***}$ & 44.280$^{***}$ \\ 
+  & (0.277) & (0.320) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 200 & 148 \\ 
+R$^{2}$ & 0.163 & 0.190 \\ 
+Adjusted R$^{2}$ & 0.095 & 0.098 \\ 
+Residual Std. Error & 1.035 (df = 184) & 0.979 (df = 132) \\ 
+F Statistic & 2.387$^{***}$ (df = 15; 184) & 2.069$^{**}$ (df = 15; 132) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular}
+\label{table:model_reliability_covariates}
+\end{table} 
+
+\newpage
+
+A surprising result in Table \ref{table:model_reliability_covariates} is the statistical significance of the reliability scores for one of our researchers. A possibility that could help explain this outcome is if the method of collecting news sources differed slightly for this researcher. The only flexibility we had in collecting the top twelve news sources was if one of the sources wasn’t available in the Ad Fontes dataset. In these instances we used our best judgment to find an affiliated news source that most closely resembled the one presented. For example, say the news source was "CBS 2 Chicago News" however that exact name is not in our data. One researcher might pick "CBS Local News" instead, and another might pick "CBS News". If one researcher consistently chose sources that were considered to be less reliable in these cases, the average reliability metric for their accounts could have differed.
+
+
+
+# Discussion
+
+## Limitations
+
+There are a few limitations of this study that could have introduced bias into the results. Firstly, the challenges with Facebook accounts being blocked resulted in differential attrition. Further, once we had a few Facebook accounts banned, we took steps to try to reduce the amount of accounts that were banned, such as using different devices. However, this ultimately did result in differential attrition. Furthermore, given the time constraints, we were limited in the sample size we were able to collect and the amount of groups we could create for the demographic information.
+
+
+## Next Steps
+
+If we were to expand on the scope of this experiment in future iterations, we would like to explore how the bias and reliability of the news sources may change as we increase engagements and interactions for the user accounts we create. For purposes of this experiment we simply created each account and immediately documented the top news sources without clicking around or generating a user account history. It could be interesting to see if accounts with more data and history would start to be presented with more biased news based on their assumed preferences. Another idea to take this research further could be to leverage a different news bias and reliability resource to see if the results still look similar. A major dependency in this experiment is on the Ad Fontes dataset and scales that they have established, so referencing another scale to determine whether the two platforms are consistently more extreme would add weight to our conclusions. 
+
+
+## Conclusion
+
+To summarize our findings - there is no evidence to suggest that either website uses demographic information when relating to the bias of the news sources. However, there was some significance to show that YouTube is showing men less reliable news than accounts identified as women or unspecified. Our data also shows that Facebook is more left-biased and unreliable when compared to YouTube. The implications of this experiment and results are likely relevant to anyone who strives for trustworthy media platforms to consume their news. Since an average user is likely unaware of how biased each platform is, these findings also raise larger questions of whether it is within the realm of responsibility for each of the social media sites to be transparent regarding the political leanings of their content.
+
+
+\newpage
+# References
+

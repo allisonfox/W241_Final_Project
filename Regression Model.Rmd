@@ -142,12 +142,24 @@ coef
 # Stargazer Outputs for Bias Models
 ```{r, warning=FALSE, results='asis'}
 stargazer(bias_model_short, bias_model_long, bias_model_filt, 
-          title = "Average Bias Regression Models", header = FALSE)
+          title = "Average Bias Regression Models", header = FALSE, omit=c("Due Date", "Researcher"))
 ```
 
 # Stargazer Outputs for Reliability Models
 ```{r, warning=FALSE, results='asis'}
 stargazer(reliability_model_short, reliability_model_long, reliability_model_filt, 
-          title = "Average Reliability Regression Models", header = FALSE)
+          title = "Average Reliability Regression Models", header = FALSE, omit=c("Due Date", "Researcher"))
 ```
 
+```{r}
+# Stargazer output for Covariates (Bias)
+stargazer(bias_model_long, bias_model_filt,
+          title = "Covariate Importance", header = FALSE,
+          omit=c("is_male", "is_female", "is_old", "is_facebook"))
+```
+```{r}
+# Stargazer output for Covariates (Reliability)
+stargazer(reliability_model_long, reliability_model_filt, 
+          title = "Covariate Importance", header = FALSE,
+          omit=c("is_male", "is_female", "is_old", "is_facebook"))
+```
